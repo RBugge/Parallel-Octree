@@ -37,8 +37,8 @@ class Main {
         }
 
         PointerOctree octree = new PointerOctree(10, 10);
-        for(int i = 0; i < 123; i++) {
-            octree.insert(vertexData[i]);
+        for (var v : vertexData) {
+            octree.insert(v);
         }
         octree.print();
     }
@@ -93,6 +93,8 @@ class PointerOctree {
         while (oob) {
             oob = false;
             int oobDir[] = new int[] { 1, 1, 1 };
+
+            // Get direction of vertex for axes that it's out of bounds
             for (int i = 0; i < 3; i++) {
                 if (v.xyz[i] < root.center[i] - root.halfSize) {
                     oob = true;
@@ -104,21 +106,32 @@ class PointerOctree {
 
             // If vertex is out of bounds resize octree in direction of vertex
             if (oob) {
+                // Calculate center of new root octant
                 double newHalfSize = root.halfSize * 2;
                 double newCenter[] = new double[] {
                         root.center[0] + oobDir[0] * root.halfSize,
                         root.center[1] + oobDir[1] * root.halfSize,
                         root.center[2] + oobDir[2] * root.halfSize,
                 };
-                Octant newRoot = new Octant(null, newCenter, newHalfSize);
-                root.parent = newRoot;
 
-                // Find current roots position inside the new root
-                // 1. Flip direction of out of bounds
-                // 2. Add 1 and divide by 2 to get either 0 or 1
-                // 3. Then multiply to get morton code equivalent position
-                int rootPos = (-oobDir[0] + 1) / 2 * 4
-                        + (-oobDir[1] + 1) / 2 * 2
+                // Initialize new root
+                Octant newRoot = new Octant(null, newCenter, newHalfSize);
+                newRoot.isLeaf = false; // New root is not a leaf
+                root.parent = newRoot;  // Set current root's parent to new root
+
+                /*
+                 * Find current roots position inside the new root
+                 *
+                 * We expand towards the point, so we want the old
+                 * root's position to be the farthest octant from
+                 * the new vertex.
+                 *
+                 * 1. Flip direction of out of bounds
+                 * 2. Add 1 and divide by 2 to get either 0 or 1
+                 * 3. Then multiply to get morton code equivalent position
+                 */
+                int rootPos = ((-oobDir[0] + 1) / 2) * 4
+                        + ((-oobDir[1] + 1) / 2) * 2
                         + (-oobDir[0] + 1) / 2;
                 newRoot.children[rootPos] = root;
 
@@ -127,10 +140,12 @@ class PointerOctree {
                     for (int j = 0; j < 2; j++) {
                         for (int k = 0; k < 2; k++) {
                             int childCode = i * 4 + j * 2 + k;
+
                             // Skip current root
                             if (childCode == rootPos)
                                 continue;
 
+                            // Calculate center of and initialize each new octant
                             newRoot.children[childCode] = new Octant(newRoot, new double[] {
                                     newCenter[0] - newHalfSize + i * root.halfSize,
                                     newCenter[1] - newHalfSize + j * root.halfSize,
@@ -169,11 +184,11 @@ class PointerOctree {
         if (firstInsertion) {
             firstInsertion = false;
             // Set halfSize of root to fit
-            root.halfSize = Math.abs(v.x) + 0.0001;
+            root.halfSize = Math.abs(v.x);
             if (Math.abs(v.y) > root.halfSize)
-                root.halfSize = Math.abs(v.y) + 0.0001;
+                root.halfSize = Math.abs(v.y);
             if (Math.abs(v.z) > root.halfSize)
-                root.halfSize = Math.abs(v.z) + 0.0001;
+                root.halfSize = Math.abs(v.z);
         } else {
             // Check if resize is necessary
             resize(v);
@@ -183,10 +198,12 @@ class PointerOctree {
         return true;
     }
 
+    // TODO: Implement remove
     boolean remove(Vertex v) {
         return true;
     }
 
+    // Print octree
     void print() {
         System.out.println("Center: [" + root.center[0] + " " + root.center[1] + " " + root.center[2] + "]");
         System.out.println("HalfSize: " + root.halfSize);
@@ -253,10 +270,12 @@ class PointerOctree {
             vertices.clear();
         }
 
+        // TODO: Implement remove
         boolean remove(Vertex v) {
             return true;
         }
 
+        // Check if vertex is a duplicate in the octant's vertices
         boolean isDuplicate(Vertex v) {
             for (var u : vertices)
                 if (u.equals(v))
@@ -265,16 +284,17 @@ class PointerOctree {
             return false;
         }
 
+        // Recursive print of octants
         void print(int tabs) {
             if (isLeaf) {
                 for (var v : vertices) {
-                    for(int i = 0; i < tabs; i++)
+                    for (int i = 0; i < tabs; i++)
                         System.out.print("\t");
                     System.out.println(v);
                 }
             } else {
                 for (int i = 0; i < children.length; i++) {
-                    for(int j = 0; j < tabs; j++)
+                    for (int j = 0; j < tabs; j++)
                         System.out.print("\t");
                     System.out.println("Octant " + i);
                     if (children[i] != null)

@@ -7,7 +7,7 @@ class Main {
     public static void main(String[] args) throws IOException {
         // Load vertices and indices
         // BufferedReader br = new BufferedReader(new FileReader(args[0]));
-        BufferedReader br = new BufferedReader(new FileReader("sphere.gum"));
+        BufferedReader br = new BufferedReader(new FileReader("../Test models/sphere.gum"));
         br.readLine(); // Ignore name
 
         // Read/split line containing vertex/index count, third tokens are the numbers
@@ -24,9 +24,9 @@ class Main {
         Vertex vertexData[] = new Vertex[numVerts];
         for (int i = 0; i < numVerts; i++) {
             vertexData[i] = new Vertex(
-                    2 * Double.parseDouble(vertexDataStr[(i) * 3 + 1]),
-                    2 * Double.parseDouble(vertexDataStr[(i) * 3 + 2]),
-                    2 * Double.parseDouble(vertexDataStr[(i) * 3 + 3]));
+                    Double.parseDouble(vertexDataStr[(i) * 3 + 1]),
+                    Double.parseDouble(vertexDataStr[(i) * 3 + 2]),
+                    Double.parseDouble(vertexDataStr[(i) * 3 + 3]));
         }
 
         int indexData[] = new int[numIndices];
@@ -94,7 +94,7 @@ class Vertex {
 }
 
 class PointerOctree {
-    Octant root = new Octant(null, new double[] { 0, 0, 0 }, 1);
+    Octant root = new Octant(null, new double[] { 0, 0, 0 }, 0.5);
     boolean firstInsertion = true;
     int vertexLimit;
     int maxDepth;
@@ -201,18 +201,6 @@ class PointerOctree {
 
     // Find and insert
     boolean insert(Vertex v) {
-        // if (firstInsertion) {
-        // firstInsertion = false;
-        // // Set halfSize of root to fit
-        // root.halfSize = Math.abs(v.x);
-        // if (Math.abs(v.y) > root.halfSize)
-        // root.halfSize = Math.abs(v.y);
-        // if (Math.abs(v.z) > root.halfSize)
-        // root.halfSize = Math.abs(v.z);
-        // } else {
-        // // Check if resize is necessary
-        // // resize(v);
-        // }
         resize(v);
 
         findOctant(v).insert(v);

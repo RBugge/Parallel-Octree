@@ -6,7 +6,7 @@ public abstract class Octree {
     Octant root;
     boolean firstInsertion = true;
     int vertexLimit;
-    int maxDepth;
+    String name;
 
     abstract protected void resize(Vertex v);
 
@@ -15,6 +15,8 @@ public abstract class Octree {
     abstract public boolean insert(Vertex v);
 
     abstract public boolean remove(Vertex v);
+
+    abstract public boolean contains(Vertex v);
 
     // Print octree
     void print() {

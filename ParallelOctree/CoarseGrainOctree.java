@@ -1,20 +1,15 @@
 package ParallelOctree;
 
-import java.util.Vector;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class CoarseGrainOctree extends Octree{
+public class CoarseGrainOctree extends Octree {
     Octant root = new Octant(null, new double[] { 0, 0, 0 }, 0.5);
-    boolean firstInsertion = true;
-    int vertexLimit;
-    int maxDepth;
     ReentrantLock lock = new ReentrantLock();
 
     // Initialize octree
-    CoarseGrainOctree(int maxDepth, int vertexLimit) {
-        this.maxDepth = maxDepth;
+    CoarseGrainOctree(int vertexLimit) {
         this.vertexLimit = vertexLimit;
-        root = new Octant(null, new double[] { 0, 0, 0 }, 0.5);
+        name = "Coarse-grain synchronized Octree";
     }
 
     // Resize octree to fit new vertex
@@ -108,7 +103,7 @@ public class CoarseGrainOctree extends Octree{
             if (v.z >= curr.center[2])
                 nextOctant += 1;
 
-            curr = curr.children[nextOctant];
+            curr = (Octant) curr.children[nextOctant];
         }
         return curr;
     }
@@ -141,13 +136,17 @@ public class CoarseGrainOctree extends Octree{
         }
     }
 
-    class Octant extends Octree.Octant{
-        Octant parent;
-        Octant children[] = new Octant[8];
-        double center[];
-        double halfSize;
-        boolean isLeaf = true;
-        Vector<Vertex> vertices = new Vector<Vertex>(); // Java vectors are synchronized, change?
+    @Override
+    public boolean contains(Vertex v) {
+        lock.lock();
+        try {
+            return find(v).contains(v);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    class Octant extends Octree.Octant {
 
         Octant(Octant parent, double center[], double halfSize) {
             this.parent = parent;

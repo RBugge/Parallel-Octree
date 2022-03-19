@@ -1,17 +1,12 @@
 package ParallelOctree;
 
-import java.util.Vector;
-
-public class PointerOctree extends Octree{
+public class PointerOctree extends Octree {
     Octant root = new Octant(null, new double[] { 0, 0, 0 }, 0.5);
-    boolean firstInsertion = true;
-    int vertexLimit;
-    int maxDepth;
 
     // Initialize octree
-    PointerOctree(int maxDepth, int vertexLimit) {
-        this.maxDepth = maxDepth;
+    PointerOctree(int vertexLimit) {
         this.vertexLimit = vertexLimit;
+        name = "Pointer based Octree";
     }
 
     // Resize octree to fit new vertex
@@ -105,7 +100,7 @@ public class PointerOctree extends Octree{
             if (v.z >= curr.center[2])
                 nextOctant += 1;
 
-            curr = curr.children[nextOctant];
+            curr = (Octant) curr.children[nextOctant];
         }
         return curr;
     }
@@ -126,13 +121,12 @@ public class PointerOctree extends Octree{
         return find(v).remove(v);
     }
 
-    class Octant extends Octree.Octant{
-        Octant parent;
-        Octant children[] = new Octant[8];
-        double center[];
-        double halfSize;
-        boolean isLeaf = true;
-        Vector<Vertex> vertices = new Vector<Vertex>(); // Java vectors are synchronized, change?
+    @Override
+    public boolean contains(Vertex v) {
+        return find(v).contains(v);
+    }
+
+    class Octant extends Octree.Octant {
 
         Octant(Octant parent, double center[], double halfSize) {
             this.parent = parent;

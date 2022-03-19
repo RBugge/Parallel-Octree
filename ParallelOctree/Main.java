@@ -1,15 +1,47 @@
 package ParallelOctree;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class Main {
-    public static void main(String[] args) throws IOException {
+    static BufferedWriter bw;
+    static String model = "cube";
+    static int minThreads = 1;
+    static int maxThreads = 12;
+    static int octantLimit = 10;
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        bw = new BufferedWriter(new FileWriter("output.txt"));
+        for(int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-n":
+                    minThreads = Integer.parseInt(args[i+1]);
+                    break;
+                case "-m":
+                    maxThreads = Integer.parseInt(args[i+1]);
+                    break;
+                case "-l":
+                    octantLimit = Integer.parseInt(args[i+1]);
+                    break;
+                case "-o":
+                    model = args[i+1];
+                    break;
+
+                default:
+                    break;
+            }
+        }
         // Load vertices and indices
         // BufferedReader br = new BufferedReader(new FileReader(args[0]));
-        String model = "stresstest";
-        BufferedReader br = new BufferedReader(new FileReader("Test models/" + model + ".gum"));
+        BufferedReader br = new BufferedReader(new FileReader("Models/" + model + ".gum"));
         br.readLine(); // Ignore name
 
         // Read/split line containing vertex/index count, third tokens are the numbers
@@ -36,48 +68,70 @@ class Main {
             indexData[i] = Integer.parseInt(indexDataStr[i + 1]);
         }
 
-        testPointerOctree(model, vertexData);
-    }
+        PointerOctree octree = new PointerOctree(octantLimit);
+        testOctree(octree, 1, vertexData);
+        // testPointerOctree(model, vertexData);
 
-    static void testPointerOctree(String model, Vertex vertexData[]) {
-        long start = System.nanoTime();
-
-        PointerOctree octree = new PointerOctree(10, 10);
-        for (var v : vertexData) {
-            octree.insert(v);
+        for (int i = minThreads; i <= maxThreads; i++) {
+            CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit);
+            testOctree(cgOctree, i, vertexData);
         }
 
+        bw.close();
+    }
+
+    static void testOctree(Octree octree, int numThreads, Vertex vertexData[])
+            throws InterruptedException, IOException {
+        long start = System.nanoTime();
+
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        CompletionService<Void> completionService = new ExecutorCompletionService<>(executor);
+        int numVertices = vertexData.length;
+
+        for (int i = 0; i < numThreads; i++) {
+            final int id = i;
+            completionService.submit(new Callable<Void>() {
+                private final int ID = id;
+
+                public Void call() {
+                    for (int i = ID; i < numVertices; i += numThreads) {
+                        octree.insert(vertexData[i]);
+                    }
+                    return null;
+                }
+            });
+        }
+
+        for (int i = 0; i < numThreads; i++) {
+            completionService.take();
+        }
+        executor.shutdown();
+
         double execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        boolean verified = verify(octree, vertexData);
+        printResults(octree.name, numThreads, vertexData.length, execTime, verified);
+    }
 
-        printResults("Pointer Octree", model, 1, vertexData.length, execTime);
-
-
-        // Testing remove with different object
-        octree.remove(new Vertex(vertexData[0].x, vertexData[0].y, vertexData[0].z));
-
-        // Should return false on vertex already removed ^
+    // TODO: Other error checking
+    static boolean verify(Octree octree, Vertex vertexData[]) {
         for (var v : vertexData) {
-            boolean result = octree.remove(v);
-            if (!result) {
-                System.out.println("Remove " + v + ": " + result);
+            if (!octree.contains(v)) {
+                System.err.println("Error: Vertex " + v + " not found");
+                return false;
             }
         }
+        return true;
     }
 
-    static void testOctree(Octree octree, String model, int numThreads, Vertex vertexData[]) {
-        long start = System.nanoTime();
-
-
-
-        double execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
-        printResults("Pointer Octree", model, 1, vertexData.length, execTime);
-    }
-
-    static void printResults(String name, String model, int numThreads, int numVertices, double runtime) {
-        System.out.println(name + "\n" +
-                "\t# Threads: 1\n" +
+    static void printResults(String name, int numThreads, int numVertices, double runtime, boolean verified)
+            throws IOException {
+        String results = name + "\n" +
                 "\tModel: " + model + "\n" +
+                "\t# Threads: " + numThreads + "\n" +
                 "\t# Vertices: " + numVertices + "\n" +
-                "\tRuntime: " + runtime + "s\n");
+                "\tVerified: " + verified + "\n" +
+                "\tRuntime: " + runtime + "s\n\n";
+        System.out.print(results);
+        bw.write(results);
     }
 }

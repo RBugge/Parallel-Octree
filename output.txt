@@ -1,0 +1,56 @@
+Pointer based Octree
+	Model: stresstest
+	# Threads: 1
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.1567252s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2321131s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2241213s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.1947897s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2169206s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.20964s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2229871s
+
+Coarse-grain synchronized Octree
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2081384s
+

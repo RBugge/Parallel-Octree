@@ -8,7 +8,8 @@ class Main {
     public static void main(String[] args) throws IOException {
         // Load vertices and indices
         // BufferedReader br = new BufferedReader(new FileReader(args[0]));
-        BufferedReader br = new BufferedReader(new FileReader("Test models/sphere.gum"));
+        String model = "stresstest";
+        BufferedReader br = new BufferedReader(new FileReader("Test models/" + model + ".gum"));
         br.readLine(); // Ignore name
 
         // Read/split line containing vertex/index count, third tokens are the numbers
@@ -35,13 +36,24 @@ class Main {
             indexData[i] = Integer.parseInt(indexDataStr[i + 1]);
         }
 
+        testPointerOctree(model, vertexData);
+    }
+
+    static void testPointerOctree(String model, Vertex vertexData[]) {
+        long start = System.nanoTime();
+
         PointerOctree octree = new PointerOctree(10, 10);
         for (var v : vertexData) {
             octree.insert(v);
         }
 
-        // Testing remove
-        octree.remove(new Vertex(0, 0.980785, -0.19509));
+        double execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+
+        printResults("Pointer Octree", model, 1, vertexData.length, execTime);
+
+
+        // Testing remove with different object
+        octree.remove(new Vertex(vertexData[0].x, vertexData[0].y, vertexData[0].z));
 
         // Should return false on vertex already removed ^
         for (var v : vertexData) {
@@ -50,5 +62,22 @@ class Main {
                 System.out.println("Remove " + v + ": " + result);
             }
         }
+    }
+
+    static void testOctree(Octree octree, String model, int numThreads, Vertex vertexData[]) {
+        long start = System.nanoTime();
+
+
+
+        double execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        printResults("Pointer Octree", model, 1, vertexData.length, execTime);
+    }
+
+    static void printResults(String name, String model, int numThreads, int numVertices, double runtime) {
+        System.out.println(name + "\n" +
+                "\t# Threads: 1\n" +
+                "\tModel: " + model + "\n" +
+                "\t# Vertices: " + numVertices + "\n" +
+                "\tRuntime: " + runtime + "s\n");
     }
 }

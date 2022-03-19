@@ -2,7 +2,7 @@ package ParallelOctree;
 
 import java.util.Vector;
 
-public class PointerOctree {
+public class PointerOctree extends Octree{
     Octant root = new Octant(null, new double[] { 0, 0, 0 }, 0.5);
     boolean firstInsertion = true;
     int vertexLimit;
@@ -15,7 +15,8 @@ public class PointerOctree {
     }
 
     // Resize octree to fit new vertex
-    void resize(Vertex v) {
+    @Override
+    protected void resize(Vertex v) {
         // Continually check if vertex is out of bounds and resize until it is contained
         boolean oob = true;
         while (oob) {
@@ -91,7 +92,8 @@ public class PointerOctree {
     }
 
     // Find octant which contains vertex v
-    Octant findOctant(Vertex v) {
+    @Override
+    protected Octant find(Vertex v) {
         Octant curr = root;
         while (!curr.isLeaf) {
             // Based on morton code, calculates correct octant based on position from center
@@ -109,29 +111,22 @@ public class PointerOctree {
     }
 
     // Find and insert
-    boolean insert(Vertex v) {
+    @Override
+    public boolean insert(Vertex v) {
         resize(v);
 
-        findOctant(v).insert(v);
+        find(v).insert(v);
 
         // print();
         return true;
     }
 
-    // TODO: Implement remove
-    boolean remove(Vertex v) {
-        return findOctant(v).remove(v);
+    @Override
+    public boolean remove(Vertex v) {
+        return find(v).remove(v);
     }
 
-    // Print octree
-    void print() {
-        System.out.println("Center: [" + root.center[0] + " " + root.center[1] + " " + root.center[2] + "]");
-        System.out.println("HalfSize: " + root.halfSize);
-        System.out.println("Octree");
-        root.print(1);
-    }
-
-    class Octant {
+    class Octant extends Octree.Octant{
         Octant parent;
         Octant children[] = new Octant[8];
         double center[];
@@ -145,7 +140,8 @@ public class PointerOctree {
             this.halfSize = halfSize;
         }
 
-        boolean insert(Vertex v) {
+        @Override
+        public boolean insert(Vertex v) {
             // If limit was reached and new vertex is not a duplicate
             if (vertices.size() >= vertexLimit && !contains(v)) {
                 vertices.add(v);
@@ -157,7 +153,8 @@ public class PointerOctree {
         }
 
         // Complete subdivision of octant into eight new octants
-        void subdivide() {
+        @Override
+        protected void subdivide() {
             isLeaf = false;
             double childHalfSize = halfSize / 2;
 
@@ -190,37 +187,19 @@ public class PointerOctree {
             vertices.clear();
         }
 
-        // TODO: Implement remove
-        boolean remove(Vertex v) {
+        @Override
+        public boolean remove(Vertex v) {
             return vertices.remove(v);
         }
 
         // Check if vertex is a duplicate in the octant's vertices
-        boolean contains(Vertex v) {
+        @Override
+        public boolean contains(Vertex v) {
             for (var u : vertices)
                 if (u.equals(v))
                     return true;
 
             return false;
-        }
-
-        // Recursive print of octants
-        void print(int tabs) {
-            if (isLeaf) {
-                for (var v : vertices) {
-                    for (int i = 0; i < tabs; i++)
-                        System.out.print("\t");
-                    System.out.println(v);
-                }
-            } else {
-                for (int i = 0; i < children.length; i++) {
-                    for (int j = 0; j < tabs; j++)
-                        System.out.print("\t");
-                    System.out.println("Octant " + i);
-                    if (children[i] != null)
-                        children[i].print(tabs + 1);
-                }
-            }
         }
     }
 }

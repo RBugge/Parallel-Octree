@@ -1,4 +1,4 @@
-package ParallelOctree;
+package ParallelOctreeV2;
 
 public class Vertex implements Comparable<Vertex> {
     double x;

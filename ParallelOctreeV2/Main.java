@@ -1,4 +1,4 @@
-package ParallelOctree;
+package ParallelOctreeV2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,19 +20,19 @@ class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         bw = new BufferedWriter(new FileWriter("output.txt"));
-        for(int i = 0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-n":
-                    minThreads = Integer.parseInt(args[i+1]);
+                    minThreads = Integer.parseInt(args[i + 1]);
                     break;
                 case "-m":
-                    maxThreads = Integer.parseInt(args[i+1]);
+                    maxThreads = Integer.parseInt(args[i + 1]);
                     break;
                 case "-l":
-                    octantLimit = Integer.parseInt(args[i+1]);
+                    octantLimit = Integer.parseInt(args[i + 1]);
                     break;
                 case "-o":
-                    model = args[i+1];
+                    model = args[i + 1];
                     break;
 
                 default:
@@ -68,20 +68,28 @@ class Main {
             indexData[i] = Integer.parseInt(indexDataStr[i + 1]);
         }
 
-        PointerOctree octree = new PointerOctree(octantLimit);
+        // Compute bounds
+        double halfSize = 0;
+        for (Vertex vertex : vertexData) {
+            for (int i = 0; i < 3; i++) {
+                if (Math.abs(vertex.xyz[i]) > halfSize)
+                    halfSize = Math.abs(vertex.xyz[i]);
+            }
+        }
+
+        PointerOctree octree = new PointerOctree(octantLimit, halfSize);
         testOctree(octree, 1, vertexData);
         // testPointerOctree(model, vertexData);
 
         for (int i = minThreads; i <= maxThreads; i++) {
-            CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit);
+            CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit, halfSize);
             testOctree(cgOctree, i, vertexData);
 
-            // Working I think
-            FineGrainOctree fgOctree = new FineGrainOctree(octantLimit);
+            FineGrainOctree fgOctree = new FineGrainOctree(octantLimit, halfSize);
             testOctree(fgOctree, i, vertexData);
 
-            // OptimisticOctree oOctree = new OptimisticOctree(octantLimit);
-            // testOctree(oOctree, i, vertexData);
+            OptimisticOctree oOctree = new OptimisticOctree(octantLimit, halfSize);
+            testOctree(oOctree, i, vertexData);
         }
 
         bw.close();

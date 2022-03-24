@@ -8,6 +8,10 @@
 
 `java -cp ./build ParallelOctree.Main`
 
+## Build and Run
+
+`javac -d build ./ParallelOctree/*.java && java -cp ./build ParallelOctree.Main`
+
 ### Optional Arguments
 
 `-o` &ensp;Model file name (no ext.).\

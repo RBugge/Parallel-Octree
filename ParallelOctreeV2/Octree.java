@@ -1,17 +1,11 @@
-package ParallelOctree;
+package ParallelOctreeV2;
 
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 public abstract class Octree {
     Octant root;
-    boolean firstInsertion = true;
     int vertexLimit;
     String name;
-
-    abstract protected void resize(Vertex v);
 
     abstract protected Octant find(Vertex v);
 

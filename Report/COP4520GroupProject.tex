@@ -10,7 +10,7 @@
 \bstctlcite{IEEEexample:BSTcontrol}
 \begin{document}
 
-\title{A Comparison of Parallel Implementations of Octrees
+\title{Comparisons of Parallel Octree Implementations
 }
 
 \author{\IEEEauthorblockN{Katherine Abreu, 
@@ -27,7 +27,7 @@ University of Central Florida, Orlando, Florida 32816\\
 \maketitle
 
 \begin{abstract}
-Octrees are tree data structures where each node has eight children nodes, or octants. Octrees are commonly used for three-dimensional modeling and real-world problem solving where binary trees and quadtrees may fall short. In this paper, we have implemented a pointer-based octree using standard representation. We tested five different methods of synchronization, including coarse-grain, fine-grain, optimistic, lazy, and non-blocking synchronizations. Of the parallelization methods tested.......(to be cont)
+Octrees are tree data structures where each node has eight children nodes, or octants. They are commonly used for three-dimensional modeling and real-world problem solving where binary trees and quadtrees may fall short. In this paper, we have implemented a pointer-based octree using standard representation. We tested five different methods of synchronization, including coarse-grain, fine-grain, optimistic, lazy, and non-blocking synchronizations. Of the parallelization methods tested.......(to be cont)
 
 \end{abstract}
 
@@ -113,23 +113,30 @@ Non-blocking synchronization is a parallelization method that doesn't make use o
 \section*{Appendix}
 \subsection*{Challenges}
 \begin{itemize}
-    \item We had difficulty landing on a topic and changed it after the initial topic selection deadline
-    \item We had a member that withdrew from the class, which added some difficulties with assigning work among the remaining members
-    \item We are facing issues with fine-grain synchronization as it is more complex than the coarse-grain synchronization.
+    \item We had difficulty landing on a topic and changed it after the initial topic selection deadline.
+    \item We had a member that withdrew from the class, which added some difficulties with assigning work among the remaining members.
+    \item We are facing issues with fine-grain synchronization as it is more complex than the coarse-grain synchronization. The resize function had to be removed to work on debugging, but we will have to try to incorporate it later.
+    \item We are also facing similar issues with optimization. We will have to incorporate the resize function and fix the algorithm.
+    \item There were issues with avoiding deadlocks in some of the synchronization techniques.
+    \item The linearization point for the subdivide method had to be moved because it was causing issues with fine-grained and optimistic synchronization.
+    \item It's been challenging having to create an algorithm that can handle resizing in a concurrent setting. As mentioned above, we had issues with this specific point in the fine-grained and optimization algorithms. We decided to create another version that had pre-computed bounds in order to have working algorithms for insertion and removal. Our next step will be to create a working non-resizing version for non-blocking synchronization. Afterwards, we'll be able to incorporate our findings from the second version and fix the version involving resizing.
 \end{itemize}
 \subsection*{Tasks Completed}
 \begin{itemize}
     \item Implemented Octree
-    \item Started coarse-grained synchronization
-    \item Started fine-grained synchronization
+    \item Finished coarse-grained synchronization
+    \item In progress with fine-grained synchronization
+    \item In progress with optimization synchronization
 \end{itemize}
     
 \subsection*{Tasks Remaining}
 \begin{itemize}
-    \item Optimistic synchronization
+    \item Finalize and improve runtime for course-grained, fine-grained, and optimization synchronization
     \item Lazy synchronization
     \item Non-blocking synchronization
-    \item Finish report, including Discussion and Conclusion sections
+    \item Include tables in the report
+    \item Finalize report, including Discussion and Conclusion sections
+    
 \end{itemize}
 
 \bibliography{COP4520GroupProject}{}

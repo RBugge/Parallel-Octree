@@ -11,89 +11,91 @@ public class FineGrainOctree extends Octree {
         name = "Fine-grain synchronized Octree";
     }
 
+    protected boolean outOfBounds(Octant o, Vertex v) {
+        for (int i = 0; i < 3; i++) {
+            if (v.xyz[i] < (o.center[i] - o.halfSize)
+                    || v.xyz[i] > (o.center[i] + o.halfSize)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Resize octree to fit new vertex
     @Override
     protected synchronized void resize(Vertex v) {
-        root.lock.lock();
-        Octant thisRoot = root;
+
+        while (!root.lock.tryLock()) {
+        }
+
+        Octant saveRoot = root;
+
         try {
+            Octant currRoot = root;
             // Continually check if vertex is out of bounds and resize until it is contained
-            boolean oob = true;
-            while (oob) {
-                oob = false;
+            while (outOfBounds(currRoot, v)) {
+
                 int oobDir[] = new int[] {
-                        v.x < root.center[0] ? -1 : 1,
-                        v.y < root.center[1] ? -1 : 1,
-                        v.z < root.center[2] ? -1 : 1 };
+                        v.x < currRoot.center[0] ? -1 : 1,
+                        v.y < currRoot.center[1] ? -1 : 1,
+                        v.z < currRoot.center[2] ? -1 : 1 };
 
-                // Get direction of vertex for axes that it's out of bounds
-                for (int i = 0; i < 3; i++) {
-                    if (v.xyz[i] < (root.center[i] - root.halfSize)
-                            || v.xyz[i] > (root.center[i] + root.halfSize)) {
-                        oob = true;
-                    }
-                }
+                // Calculate center of new root octant
+                double newHalfSize = currRoot.halfSize * 2;
+                double newCenter[] = new double[] {
+                        currRoot.center[0] + oobDir[0] * currRoot.halfSize,
+                        currRoot.center[1] + oobDir[1] * currRoot.halfSize,
+                        currRoot.center[2] + oobDir[2] * currRoot.halfSize,
+                };
 
-                // If vertex is out of bounds resize octree in direction of vertex
-                if (oob) {
-                    // Calculate center of new root octant
-                    double newHalfSize = root.halfSize * 2;
-                    double newCenter[] = new double[] {
-                            root.center[0] + oobDir[0] * root.halfSize,
-                            root.center[1] + oobDir[1] * root.halfSize,
-                            root.center[2] + oobDir[2] * root.halfSize,
-                    };
+                // Initialize new root
+                Octant newRoot = new Octant(null, newCenter, newHalfSize);
+                newRoot.isLeaf = false; // New root is not a leaf
+                currRoot.parent = newRoot; // Set current root's parent to new root
 
-                    // Initialize new root
-                    Octant newRoot = new Octant(null, newCenter, newHalfSize);
-                    newRoot.isLeaf = false; // New root is not a leaf
-                    root.parent = newRoot; // Set current root's parent to new root
+                /*
+                 * Find current roots position inside the new root
+                 *
+                 * We expand towards the point, so we want the old
+                 * root's position to be the farthest octant from
+                 * the new vertex.
+                 *
+                 * 1. Flip direction of out of bounds
+                 * 2. Add 1 and divide by 2 to get either 0 or 1
+                 * 3. Then multiply to get morton code equivalent position
+                 */
+                int rootPos = ((-oobDir[0] + 1) / 2) * 4
+                        + ((-oobDir[1] + 1) / 2) * 2
+                        + ((-oobDir[2] + 1) / 2);
+                newRoot.children[rootPos] = currRoot;
 
-                    /*
-                     * Find current roots position inside the new root
-                     *
-                     * We expand towards the point, so we want the old
-                     * root's position to be the farthest octant from
-                     * the new vertex.
-                     *
-                     * 1. Flip direction of out of bounds
-                     * 2. Add 1 and divide by 2 to get either 0 or 1
-                     * 3. Then multiply to get morton code equivalent position
-                     */
-                    int rootPos = ((-oobDir[0] + 1) / 2) * 4
-                            + ((-oobDir[1] + 1) / 2) * 2
-                            + ((-oobDir[2] + 1) / 2);
-                    newRoot.children[rootPos] = root;
+                // Initialize other child octants
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        for (int k = 0; k < 2; k++) {
+                            int childCode = i * 4 + j * 2 + k;
 
-                    // Initialize other child octants
-                    for (int i = 0; i < 2; i++) {
-                        for (int j = 0; j < 2; j++) {
-                            for (int k = 0; k < 2; k++) {
-                                int childCode = i * 4 + j * 2 + k;
+                            // Skip current root
+                            if (childCode == rootPos)
+                                continue;
 
-                                // Skip current root
-                                if (childCode == rootPos)
-                                    continue;
-
-                                // Calculate center of and initialize each new octant
-                                newRoot.children[childCode] = new Octant(newRoot, new double[] {
-                                        newCenter[0] - root.halfSize + i * newHalfSize,
-                                        newCenter[1] - root.halfSize + j * newHalfSize,
-                                        newCenter[2] - root.halfSize + k * newHalfSize,
-                                }, root.halfSize);
-                            }
+                            // Calculate center of and initialize each new octant
+                            newRoot.children[childCode] = new Octant(newRoot, new double[] {
+                                    newCenter[0] - currRoot.halfSize + i * newHalfSize,
+                                    newCenter[1] - currRoot.halfSize + j * newHalfSize,
+                                    newCenter[2] - currRoot.halfSize + k * newHalfSize,
+                            }, currRoot.halfSize);
                         }
                     }
-
-                    // Set octree root to new root
-                    newRoot.lock.lock();
-                    root = newRoot;
-                    thisRoot.lock.unlock();
-                    thisRoot = root;
                 }
+
+                currRoot = newRoot;
             }
+
+            // Set octree root to new root
+            root = currRoot;
         } finally {
-            thisRoot.lock.unlock();
+            saveRoot.lock.unlock();
         }
     }
 
@@ -107,10 +109,12 @@ public class FineGrainOctree extends Octree {
     // Find and insert
     @Override
     public boolean insert(Vertex v) {
+
         // Check if resize is necessary
         resize(v);
 
-        root.lock.lock();
+        while (!root.lock.tryLock()) {
+        }
         Octant curr = root;
         Octant pred;
         try {
@@ -213,12 +217,13 @@ public class FineGrainOctree extends Octree {
 
         @Override
         public boolean insert(Vertex v) {
+            if (contains(v))
+                return false;
+
+            vertices.add(v);
             // If limit was reached and new vertex is not a duplicate
-            if (vertices.size() >= vertexLimit && !contains(v)) {
-                vertices.add(v);
+            if (vertices.size() > vertexLimit) {
                 subdivide();
-            } else {
-                vertices.add(v);
             }
             return true;
         }
@@ -226,13 +231,15 @@ public class FineGrainOctree extends Octree {
         // Complete subdivision of octant into eight new octants
         @Override
         protected void subdivide() {
-            isLeaf = false;
+
             double childHalfSize = halfSize / 2;
+
+            Octant tempChildren[] = new Octant[8];
 
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 2; j++) {
                     for (int k = 0; k < 2; k++) {
-                        children[i * 4 + j * 2 + k] = new Octant(this, new double[] {
+                        tempChildren[i * 4 + j * 2 + k] = new Octant(this, new double[] {
                                 center[0] - childHalfSize + i * halfSize,
                                 center[1] - childHalfSize + j * halfSize,
                                 center[2] - childHalfSize + k * halfSize,
@@ -251,11 +258,16 @@ public class FineGrainOctree extends Octree {
                 if (v.z >= center[2])
                     nextOctant += 1;
 
-                children[nextOctant].insert(v);
+                tempChildren[nextOctant].insert(v);
             }
+
+            children = tempChildren;
 
             // Clear children
             vertices.clear();
+
+            // linearization point?
+            isLeaf = false;
         }
 
         @Override

@@ -12,14 +12,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 class Main {
-    static BufferedWriter bw;
+    static BufferedWriter bwInsert;
+    static BufferedWriter bwRemove;
+    static BufferedWriter bwInsertRemove;
     static String model = "cube";
     static int minThreads = 1;
     static int maxThreads = 12;
     static int octantLimit = 10;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        bw = new BufferedWriter(new FileWriter("output.txt"));
+        bwInsert = new BufferedWriter(new FileWriter("V2insertOutput.txt"));
+        bwRemove = new BufferedWriter(new FileWriter("V2removeOutput.txt"));
+        bwInsertRemove = new BufferedWriter(new FileWriter("V2insertRemoveOutput.txt"));
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-n":
@@ -92,17 +96,21 @@ class Main {
             testOctree(oOctree, i, vertexData);
         }
 
-        bw.close();
+        bwInsert.close();
+        bwRemove.close();
+        bwInsertRemove.close();
     }
 
     static void testOctree(Octree octree, int numThreads, Vertex vertexData[])
             throws InterruptedException, IOException {
-        long start = System.nanoTime();
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         CompletionService<Void> completionService = new ExecutorCompletionService<>(executor);
         int numVertices = vertexData.length;
 
+        long start = System.nanoTime();
+
+        // Test Insertion
         for (int i = 0; i < numThreads; i++) {
             final int id = i;
             completionService.submit(new Callable<Void>() {
@@ -120,37 +128,59 @@ class Main {
         for (int i = 0; i < numThreads; i++) {
             completionService.take();
         }
-        executor.shutdown();
 
         double execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
-        boolean verified = verify(octree, vertexData);
-        printResults(octree.name, numThreads, vertexData.length, execTime, verified);
+        boolean verified = verify(octree, vertexData) == 0;
+        // printResults(bwInsert, "Insertion", octree.name, numThreads, vertexData.length, execTime, verified);
+
+        // Test Removal
+        for (int i = 0; i < numThreads; i++) {
+            final int id = i;
+            completionService.submit(new Callable<Void>() {
+                private final int ID = id;
+
+                public Void call() {
+                    for (int i = ID; i < numVertices; i += numThreads) {
+                        octree.remove(vertexData[i]);
+                    }
+                    return null;
+                }
+            });
+        }
+
+        for (int i = 0; i < numThreads; i++) {
+            completionService.take();
+        }
+        executor.shutdown();
+
+        execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        verified = verify(octree, vertexData) == numVertices;
+        printResults(bwRemove, "Removal", octree.name, numThreads, vertexData.length, execTime, verified);
     }
 
     // TODO: Other error checking
-    static boolean verify(Octree octree, Vertex vertexData[]) {
-        boolean verified = true;
+    static int verify(Octree octree, Vertex vertexData[]) {
         int count = 0;
         for (var v : vertexData) {
             if (!octree.contains(v)) {
-                // System.err.println("Error: Vertex " + v + " not found");
-                verified = false;
                 count++;
             }
         }
         System.out.println("Missing: " + count);
-        return verified;
+        return count;
     }
 
-    static void printResults(String name, int numThreads, int numVertices, double runtime, boolean verified)
+    static void printResults(BufferedWriter file, String testType, String name, int numThreads, int numVertices,
+            double runtime, boolean verified)
             throws IOException {
         String results = name + "\n" +
+                "\tTest: " + testType + "\n" +
                 "\tModel: " + model + "\n" +
                 "\t# Threads: " + numThreads + "\n" +
                 "\t# Vertices: " + numVertices + "\n" +
                 "\tVerified: " + verified + "\n" +
                 "\tRuntime: " + runtime + "s\n\n";
         System.out.print(results);
-        bw.write(results);
+        file.write(results);
     }
 }

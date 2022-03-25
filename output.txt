@@ -1,70 +1,91 @@
 Pointer based Octree
-	Model: stresstest
+	Model: cube
 	# Threads: 1
-	# Vertices: 1009026
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.2267204s
+	Runtime: 0.0040808s
 
 Coarse-grain synchronized Octree
-	Model: stresstest
-	# Threads: 6
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 1
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.4276945s
+	Runtime: 3.412E-4s
 
 Fine-grain synchronized Octree
-	Model: stresstest
-	# Threads: 6
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 1
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.7642646s
+	Runtime: 2.313E-4s
 
 Optimistic synchronized Octree
-	Model: stresstest
-	# Threads: 6
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 1
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.4625124s
+	Runtime: 2.435E-4s
 
 Coarse-grain synchronized Octree
-	Model: stresstest
-	# Threads: 7
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 2
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.3835819s
+	Runtime: 2.877E-4s
 
 Fine-grain synchronized Octree
-	Model: stresstest
-	# Threads: 7
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 2
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.5567009s
+	Runtime: 2.766E-4s
 
 Optimistic synchronized Octree
-	Model: stresstest
-	# Threads: 7
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 2
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.1418067s
+	Runtime: 2.953E-4s
 
 Coarse-grain synchronized Octree
-	Model: stresstest
-	# Threads: 8
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 3
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.4162817s
+	Runtime: 3.937E-4s
 
 Fine-grain synchronized Octree
-	Model: stresstest
-	# Threads: 8
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 3
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.6234743s
+	Runtime: 3.4E-4s
 
 Optimistic synchronized Octree
-	Model: stresstest
-	# Threads: 8
-	# Vertices: 1009026
+	Model: cube
+	# Threads: 3
+	# Vertices: 8
 	Verified: true
-	Runtime: 0.0465315s
+	Runtime: 3.028E-4s
+
+Coarse-grain synchronized Octree
+	Model: cube
+	# Threads: 4
+	# Vertices: 8
+	Verified: true
+	Runtime: 3.668E-4s
+
+Fine-grain synchronized Octree
+	Model: cube
+	# Threads: 4
+	# Vertices: 8
+	Verified: true
+	Runtime: 3.477E-4s
+
+Optimistic synchronized Octree
+	Model: cube
+	# Threads: 4
+	# Vertices: 8
+	Verified: true
+	Runtime: 4.511E-4s
 

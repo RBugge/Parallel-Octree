@@ -1,0 +1,54 @@
+@inproceedings{ChaudharyEtAl,
+  title={Parallel Manipulations of Octrees and Quadtrees},
+  author={Vipin Chaudhary and K. R. Karthik Kamath and Prakash Arunachalam and Jake K. Aggarwal},
+  booktitle={ICPIA},
+  year={1992}
+}
+
+@inproceedings{Karras, author = {Karras, Tero}, title = {Maximizing Parallelism in the Construction of BVHs, Octrees, and k-d Trees}, year = {2012}, isbn = {9783905674415}, publisher = {Eurographics Association}, address = {Goslar, DEU}, abstract = {A number of methods for constructing bounding volume hierarchies and point-based octrees on the GPU are based on the idea of ordering primitives along a space-filling curve. A major shortcoming with these methods is that they construct levels of the tree sequentially, which limits the amount of parallelism that they can achieve. We present a novel approach that improves scalability by constructing the entire tree in parallel. Our main contribution is an in-place algorithm for constructing binary radix trees, which we use as a building block for other types of trees.}, booktitle = {Proceedings of the Fourth ACM SIGGRAPH / Eurographics Conference on High-Performance Graphics}, pages = {33–37}, numpages = {5}, location = {Paris, France}, series = {EGGH-HPG'12} }
+
+@article{HariharanSrinivas,
+title = {Efficient parallel algorithms and software for compressed octrees with applications to hierarchical methods},
+journal = {Parallel Computing},
+volume = {31},
+number = {3},
+pages = {311-331},
+year = {2005},
+issn = {0167-8191},
+doi = {https://doi.org/10.1016/j.parco.2004.12.007},
+url = {https://www.sciencedirect.com/science/article/pii/S016781910500027X},
+author = {Bhanu Hariharan and Srinivas Aluru},
+keywords = {Compressed octrees, Hierarchical methods, Parallel algorithms, Parallel software library, Parallel tree data structures},
+abstract = {We describe the design and implementation of efficient parallel algorithms, and a software library for the parallel implementation of compressed octree data structures. Octrees are widely used in supporting hierarchical methods for scientific applications such as the N-body problem, molecular dynamics and smoothed particle hydrodynamics. The primary goal of our work is to identify and abstract the commonalities present in various hierarchical methods using octrees, design efficient parallel algorithms for them, and encapsulate them in a software library. We designed provably efficient parallel algorithms and implementation strategies that perform well irrespective of the spatial distribution of data in the computational domain. The library will enable rapid development of applications, allowing application developers to use efficient parallel algorithms developed for this purpose, without the necessity of having detailed knowledge of the algorithms or of implementing them. The software is developed in C using the Message Passing Interface (MPI). We report experimental results on an IBM xSeries parallel computer.}
+}
+
+@incollection{textbook,
+title = {Chapter 9 - Linked lists: The role of locking},
+editor = {Maurice Herlihy and Nir Shavit and Victor Luchangco and Michael Spear},
+booktitle = {The Art of Multiprocessor Programming (Second Edition)},
+publisher = {Morgan Kaufmann},
+edition = {Second Edition},
+address = {Boston},
+pages = {201-228},
+year = {2021},
+isbn = {978-0-12-415950-1},
+doi = {https://doi.org/10.1016/B978-0-12-415950-1.00019-7},
+url = {https://www.sciencedirect.com/science/article/pii/B9780124159501000197},
+author = {Maurice Herlihy and Nir Shavit and Victor Luchangco and Michael Spear},
+keywords = {coarse-grained locking, fine-grained locking, optimistic synchronization, lazy synchronization, nonblocking synchronization, wait-free, lock-free, linked lists, concurrent data structures, representation invariants, abstracton map, linearization point}
+}
+
+@misc{octrees2, title={Advanced octrees 1: Preliminaries, insertion strategies and maximum tree depth}, url={https://geidav.wordpress.com/2014/07/18/advanced-octrees-1-preliminaries-insertion-strategies-and-max-tree-depth/}, journal={The Infinite Loop}, author={Geier, David}, year={2014}, month={Nov}} 
+ 
+@misc{octrees1, title={Advanced octrees 2: Node representations}, url={https://geidav.wordpress.com/2014/08/18/advanced-octrees-2-node-representations/}, journal={The Infinite Loop}, author={Geier, David}, year={2014}, month={Aug}} 
+  
+@article{ZhouEtAl,
+author = {Zhou, Kun and Gong, Minmin and Huang, Xin and Guo, Baining},
+year = {2010},
+month = {05},
+pages = {},
+title = {Data-Parallel Octrees for Surface Reconstruction},
+volume = {17},
+journal = {IEEE transactions on visualization and computer graphics},
+doi = {10.1109/TVCG.2010.75}
+}

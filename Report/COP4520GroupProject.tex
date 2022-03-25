@@ -1,0 +1,138 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\bstctlcite{IEEEexample:BSTcontrol}
+\begin{document}
+
+\title{A Comparison of Parallel Implementations of Octrees
+}
+
+\author{\IEEEauthorblockN{Katherine Abreu, 
+Alexandra Brown, 
+Ryan Bugge,  
+and Ayiana Mallory}
+
+\IEEEauthorblockA{
+College of Engineering and Computer Science\\
+University of Central Florida, Orlando, Florida 32816\\
+}}
+
+
+\maketitle
+
+\begin{abstract}
+Octrees are tree data structures where each node has eight children nodes, or octants. Octrees are commonly used for three-dimensional modeling and real-world problem solving where binary trees and quadtrees may fall short. In this paper, we have implemented a pointer-based octree using standard representation. We tested five different methods of synchronization, including coarse-grain, fine-grain, optimistic, lazy, and non-blocking synchronizations. Of the parallelization methods tested.......(to be cont)
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+parallel computing, octrees, locking
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Octrees have many applications in three-dimensional computer graphics and can be used to represent the three-dimensional world. They can be defined as “recursive, axis-aligned, spatial partitioning data structure… to optimize collision detection, nearest neighbor search, frustum culling and more.” \cite{octrees1} In other words, they allow us to locate the closest points from a given point as well as focus on a certain area in an optimal way. They are tree data structures with the purpose of subdividing into octants to split a three-dimensional space.
+
+In this paper, we aim to find the most efficient way to implement and utilize octrees with parallel computing. We have implemented five methods of synchronization including coarse-grain, fine-grain, optimistic, lazy, and non-blocking synchronization. 
+
+The rest of this paper is organized as follows: Section II is about octrees, previous implementations, and how we implemented them. Section III describes the different methods of parallelization used and how each was implemented. Section IV discusses our results of tests for each parallelization method. Section V compares our results with expected results and considers areas of further investigation. Section VI concludes our research.
+
+
+\section{Related Works}
+In 1992, Chaudhary et al. \cite{ChaudharyEtAl} presented methods for constructing and manipulating octrees in parallel machines. To construct the octree, they continually split a binary image into octants until each node is either all white (object) or black (non-object). To parallelize the octree, it was treated as three quadtrees, representing the top, front, and side views of a 3D objects,  traversed in parallel. They achieved a slight speedup in comparison to the sequential version. However, they did experience a bottleneck when it came to task creation and shared resources.
+
+In 2005, Hariharan and Aluru \cite{HariharanSrinivas} discussed software for parallelizing compressed octrees. Using their method, they saw good speedup regardless of whether or not the distribution was uniform and it scaled well with the number of processors being used. 
+
+In 2010, Zhou et al. \cite{ZhouEtAl} presented the first parallel surface reconstruction algorithm that ran on the GPU. It uses an octree to reconstruct a real-world 3D scan. Their GPU implementation performed over two orders of magnitude better than a similar CPU implementation. Due to memory constraints, however, the octree can only have a depth of 9. 
+
+In 2012, Tero Karras \cite{Karras} implemented an in-place algorithm for radix-binary trees used to construct octrees on the GPU. It outputs nodes in a strict depth-first order and scales well, as well as performs better than other generation methods tested by avoiding sequential bottlenecks. 
+
+This is by no means a comprehensive review of the work done on octrees, but it has provided insight on the types of results we expect to see. 
+
+\section{Octree Implementation}
+There are generally two different types of octree data structures. They can be pointer-based octrees or linear-based octrees with certain advantages and disadvantages in each case. We decided to work on pointer-based octrees because it allows us to update the octree in a quick, efficient manner, allowing us to implement the parallel techniques we chose to incorporate. Having threads that continuously add, remove, and search concurrently will cause the octree to be updated frequently. Therefore, we decided pointer-based would be the best choice.
+
+There are three different ways to represent pointer-based octrees. One way is called \textit{standard representation}. It involves having eight pointers for each of the eight child nodes and one pointer for the parent node. This method also uses a Boolean flag to allow us to check if the child nodes are either inner nodes or leaf nodes.
+
+Another type of representation is \textit{block representation}, which involves storing a pointer to all eight children rather than having one pointer for each child. “That way the storage size of an inner node can be reduced from 105 bytes down to 49 bytes, which is only 47 percent of the original size.” \cite{octrees2} The disadvantage is that it does not support on-demand allocation, since it would have to allocate all eight children every time a node is subdivided. 
+
+The last type of representation is \textit{sibling-child representation}. In this case, it allows for on-demand allocation by allowing the use of only two pointers per node instead of eight. For example, if a node is created, their first pointer would point to the next child node that shares the same parent. The second pointer would point to the first child of the node we have just created. This only ends up using one-fourth of the memory used for pointers, since it uses two instead of eight. A consequence of using this is that it ends up “dereferencing on average four times more pointers” \cite{octrees2} when nodes are randomly accessed. 
+
+Out of all the three choices, we ended up using the standard representation. By using eight pointers for all eight child nodes, we are able to use on-demand allocation. This means that we can create a child node once we have found an object that belongs there rather than create all eight child nodes every time there is a subdivision, leading to memory waste. We also have the advantage of being able to update and traverse it easily and quickly. Thus, standard representation was the best option.
+
+
+\section{Methods of Parallelization}
+
+\subsection{Coarse-Grain Synchronization}
+The coarse-grained synchronization algorithm is essentially a sequential algorithm and involves the use of only one lock. Each thread must acquire the lock before it is able to access the list of items. After the thread locks the object, it can begin execution. Afterward, it releases the lock, ready for another thread to access the list. Thus, the linearization point for any method call is the moment the thread obtains the lock. This is essentially used for all types of method calls, such as \verb|add()|, \verb|remove()|, and \verb|contains()|. \cite{textbook}
+
+\subsubsection{Our Implementation}
+We decided to follow a similar approach when implementing the coarse-grain synchronization into our program. Every time a thread calls a method, it attempts to acquire the lock. Once it has the lock, it acts as a signal that they have locked the entire octree. Once the thread is done adding, removing, or searching for an object, it releases the lock. 
+
+To make this more optimal, we added a finally block at the end to guarantee that the thread will release the lock no matter what happens after the try block exits. This ensures that even in the case of an exception being thrown, the thread will still release the lock. This was an easy implementation and is considered to be correct with an average runtime of (INSERT RUNTIME HERE). The problem is that it doesn't bode well with contention. A bottleneck occurs with the issue that if one thread gets delayed, the rest of the threads will be delayed as well. We expect this runtime to be worse compared to the other parallel techniques we implemented.
+
+\subsection{Fine-Grain Synchronization}
+Fine-grained synchronization is similar to course-grained synchronization with the exception that, instead of locking the entire list, each thread traverses through the list using two locks: one for the predecessor and one for the current node. All the threads are able to go down the list together and only lock individual nodes in the list. It involves a few more rules with the way they are locked. Once the predecessor is locked, the current node can be locked, but only while predecessor is locked. If the predecessor is unlocked and then the current node is locked, there’s a chance another thread could delete that current node before it’s locked. Another name for this is lock coupling. They also must lock in the same order to avoid deadlock, which is explained further down.\cite{textbook}
+
+This type of synchronization is deadlock-free as well as starvation-free. What helps it avoid deadlock is that all the methods lock the predecessor and current node in the same order. In this case, it’s predecessor and then current node. Let’s say there are two nodes \textit{a} and \textit{b} where \textit{a} points to \textit{b} and let’s say the \verb|delete()| method is set to have the thread lock the current node and then lock the predecessor while the \verb|add()| method is set to have the thread lock the predecessor and then the current node. If a thread calls \verb|delete()| and locks node \textit{b} while another thread calls \verb|add()| and locks node \textit{a}, the first thread will forever wait for node \textit{a} to unlock while the second thread will forever wait for node \textit{b} to unlock, resulting in a deadlock. Since fine-grained synchronization makes sure that each method locks in the same order, deadlock-freedom is achieved. The way starvation-freedom is achieved has to do with the way the threads operate. Since they go down a line with no deadlock, one thread will never starve from locking a node because no matter what happens, the threads must unlock at some point and continue down the line. This is especially true because of the finally block in the algorithm that guarantees the threads will unlock even if an exception occurs.\cite{textbook}
+
+\subsubsection{Our Implementation}
+
+\subsection{Optimistic Synchronization}
+Optimistic synchronization further reduces synchronization costs from fine-grain synchronization by reducing the amount of locks needed. \cite{textbook} Optimistic approaches do not lock while traversing the data structure. Once the thread finds the target nodes, it will lock the target and its predecessor and proceed to validate the data structure. If everything is as it should be, the thread continues with its operation. Otherwise, the thread will restart its traversal. 
+
+This synchronization method gets its name from the fact that, as long as there are no issues, it is fast. However, if many validations need to be performed, it can significantly increase the cost of synchronization. Therefore, assuming all is well -- being optimistic -- is key to the speedup this method can provide. Optimistic synchronization is not starvation-free.
+
+%\subsubsection{Our Implementation}
+
+\subsection{Lazy Synchronization}
+While optimistic synchronization still requires locks on its \verb|contains()| method, lazy synchronization removes that requirement. Lazy synchronization makes \verb|contains()| wait-free, and \verb|add()| and \verb|remove()| only traverse the list once. \cite{textbook} 
+
+The \verb|contains()| method doesn't lock anything and only checks to see if a node exists. \verb|add()| and \verb|remove()| still lock the predecessor and target nodes, but there is no need to re-traverse the entire data structure. Additionally, \verb|remove()| only logically removes the target node, leaving a different thread to physically remove the node. As with optimistic synchronization, lazy synchronization is not starvation-free.
+
+
+%\subsubsection{Our Implementation}
+
+\subsection{Non-Blocking Synchronization}
+Non-blocking synchronization is a parallelization method that doesn't make use of any locks. \verb|contains()| is wait-free while \verb|add()| and \verb|remove()| are lock-free. \cite{textbook} The primary way to achieve the lock-free nature of this method is to use atomic method \verb|compareAndSet()|.
+
+
+%\subsubsection{Our Implementation}
+
+\section{Results}
+
+%\section{Discussion}
+
+%\section{Conclusion}
+\section*{Appendix}
+\subsection*{Challenges}
+\begin{itemize}
+    \item We had difficulty landing on a topic and changed it after the initial topic selection deadline
+    \item We had a member that withdrew from the class, which added some difficulties with assigning work among the remaining members
+    \item We are facing issues with fine-grain synchronization as it is more complex than the coarse-grain synchronization.
+\end{itemize}
+\subsection*{Tasks Completed}
+\begin{itemize}
+    \item Implemented Octree
+    \item Started coarse-grained synchronization
+    \item Started fine-grained synchronization
+\end{itemize}
+    
+\subsection*{Tasks Remaining}
+\begin{itemize}
+    \item Optimistic synchronization
+    \item Lazy synchronization
+    \item Non-blocking synchronization
+    \item Finish report, including Discussion and Conclusion sections
+\end{itemize}
+
+\bibliography{COP4520GroupProject}{}
+\bibliographystyle{IEEEtran}
+
+\end{document}

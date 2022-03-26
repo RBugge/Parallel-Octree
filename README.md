@@ -55,3 +55,7 @@ Results:
 ...
 ...
 ```
+
+## Notes
+
+Models are currently loaded in from `.gum` files. A tool is provided to convert `.obj` to `.gum` to use models not included with the project. It is planned to load `.obj` files directly in the final version, however, it is not a top priority.

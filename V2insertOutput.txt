@@ -1,0 +1,296 @@
+Pointer based Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 1
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2253743s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 1
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.230244401s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 1
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2754891s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 1
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2475215s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 2
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2607876s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 2
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.240022701s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 2
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.1707692s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 3
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3077414s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 3
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.4879234s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 3
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.063794s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 4
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3295212s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 4
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.5200973s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 4
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.059963199s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 5
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3312779s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 5
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.5158891s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 5
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.1514475s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3701072s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.573858201s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.050026299s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.4297602s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.559046999s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.1502961s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.355722199s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.669097799s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.0413605s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3730581s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.665722201s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.0452007s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.4188312s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.691265101s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.045551701s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.417174399s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.6278966s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.185639s
+
+Coarse-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.427924799s
+
+Fine-grain synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.645086999s
+
+Optimistic synchronized Octree
+	Test: Insertion
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.1936887s
+

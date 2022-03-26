@@ -4,7 +4,7 @@ Pointer based Octree
 	# Threads: 1
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.5299929s
+	Runtime: 0.558541299s
 
 Coarse-grain synchronized Octree
 	Test: Removal
@@ -12,7 +12,7 @@ Coarse-grain synchronized Octree
 	# Threads: 1
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.5239385s
+	Runtime: 0.5497909s
 
 Fine-grain synchronized Octree
 	Test: Removal
@@ -20,7 +20,7 @@ Fine-grain synchronized Octree
 	# Threads: 1
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.7350623s
+	Runtime: 0.7291758s
 
 Optimistic synchronized Octree
 	Test: Removal
@@ -28,7 +28,7 @@ Optimistic synchronized Octree
 	# Threads: 1
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.5505464s
+	Runtime: 0.551578499s
 
 Coarse-grain synchronized Octree
 	Test: Removal
@@ -36,7 +36,7 @@ Coarse-grain synchronized Octree
 	# Threads: 2
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.7137943s
+	Runtime: 0.7735382s
 
 Fine-grain synchronized Octree
 	Test: Removal
@@ -44,7 +44,7 @@ Fine-grain synchronized Octree
 	# Threads: 2
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 1.1368923s
+	Runtime: 0.753951601s
 
 Optimistic synchronized Octree
 	Test: Removal
@@ -52,7 +52,7 @@ Optimistic synchronized Octree
 	# Threads: 2
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.4659614s
+	Runtime: 0.4350676s
 
 Coarse-grain synchronized Octree
 	Test: Removal
@@ -60,7 +60,7 @@ Coarse-grain synchronized Octree
 	# Threads: 3
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.9034606s
+	Runtime: 0.8644413s
 
 Fine-grain synchronized Octree
 	Test: Removal
@@ -68,7 +68,7 @@ Fine-grain synchronized Octree
 	# Threads: 3
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 1.332227s
+	Runtime: 1.459414799s
 
 Optimistic synchronized Octree
 	Test: Removal
@@ -76,7 +76,7 @@ Optimistic synchronized Octree
 	# Threads: 3
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.2827048s
+	Runtime: 0.2843511s
 
 Coarse-grain synchronized Octree
 	Test: Removal
@@ -84,7 +84,7 @@ Coarse-grain synchronized Octree
 	# Threads: 4
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.9669628s
+	Runtime: 0.886350499s
 
 Fine-grain synchronized Octree
 	Test: Removal
@@ -92,7 +92,7 @@ Fine-grain synchronized Octree
 	# Threads: 4
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 1.3694995s
+	Runtime: 1.6644511s
 
 Optimistic synchronized Octree
 	Test: Removal
@@ -100,5 +100,197 @@ Optimistic synchronized Octree
 	# Threads: 4
 	# Vertices: 1009026
 	Verified: true
-	Runtime: 0.3393711s
+	Runtime: 0.2512101s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 5
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.9204467s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 5
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.5504396s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 5
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3385818s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.0828308s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.607647s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 6
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2262308s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.142323199s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.6438015s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 7
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3243458s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.114231s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.8844766s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 8
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.2090464s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.139148699s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.811742901s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 9
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.210116199s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.1990349s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.872258401s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 10
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.209883401s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.2339269s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.7570358s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 11
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.3480046s
+
+Coarse-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.2456911s
+
+Fine-grain synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 1.7857173s
+
+Optimistic synchronized Octree
+	Test: Removal
+	Model: stresstest
+	# Threads: 12
+	# Vertices: 1009026
+	Verified: true
+	Runtime: 0.354244299s
 

@@ -131,7 +131,7 @@ class Main {
 
         double execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
         boolean verified = verify(octree, vertexData) == 0;
-        // printResults(bwInsert, "Insertion", octree.name, numThreads, vertexData.length, execTime, verified);
+        printResults(bwInsert, "Insertion", octree.name, numThreads, vertexData.length, execTime, verified);
 
         // Test Removal
         for (int i = 0; i < numThreads; i++) {

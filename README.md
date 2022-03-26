@@ -1,16 +1,21 @@
 # Parallel Octree
 
-## Build
-
-`javac -d build ./ParallelOctree/*.java`
-
-## Run
-
-`java -cp ./build ParallelOctree.Main`
-
 ## Build and Run
 
-`javac -d build ./ParallelOctree/*.java && java -cp ./build ParallelOctree.Main`
+### Build
+
+V1: `javac -d build ./ParallelOctree/*.java`\
+V2: `javac -d build ./ParallelOctreeV2/*.java`
+
+### Run
+
+V1: `java -cp ./build ParallelOctree.Main`\
+V2: `java -cp ./build ParallelOctreeV2.Main`
+
+### Both
+
+V1: `javac -d build ./ParallelOctree/*.java && java -cp ./build ParallelOctree.Main`\
+V2: `javac -d build ./ParallelOctreeV2/*.java && java -cp ./build ParallelOctreeV2.Main`
 
 ### Optional Arguments
 
@@ -26,14 +31,17 @@
 `-l` &ensp;Vertex limit for octants\
 &ensp;&ensp;&ensp;&ensp;Default: `10`
 
-### Example
+#### Example
 
 `java -cp ./build ParallelOctree.Main -o sphere -n 6 -m 12 -l 5`
 
 ## Output
 
-Terminal and\
-File: `output.txt`
+Output is generated for each version of the octree and at each number of threads in the range provided.
+
+Terminal and Files:\
+V1: `output.txt`\
+V2: `V2insertOutput.txt` and `V2removeOutput.txt`
 
 Results:
 

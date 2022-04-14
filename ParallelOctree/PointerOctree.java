@@ -6,7 +6,7 @@ public class PointerOctree extends Octree {
     // Initialize octree
     PointerOctree(int vertexLimit) {
         this.vertexLimit = vertexLimit;
-        name = "Pointer based Octree";
+        name = "PointerBased";
     }
 
     // Resize octree to fit new vertex

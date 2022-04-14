@@ -8,7 +8,7 @@ public class FineGrainOctree extends Octree {
     // Initialize octree
     FineGrainOctree(int vertexLimit) {
         this.vertexLimit = vertexLimit;
-        name = "Fine-grain synchronized Octree";
+        name = "Fine-Grain";
     }
 
     protected boolean outOfBounds(Octant o, Vertex v) {

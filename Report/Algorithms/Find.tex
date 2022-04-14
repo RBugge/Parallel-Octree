@@ -1,0 +1,117 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+% \floatname{algorithm}{Pseudocode}
+
+\begin{document}
+
+\setcounter{algorithm}{0}
+\begin{algorithm}
+    \caption{Find}\label{alg:octree find}
+    \begin{algorithmic}[1]
+        \Statex \textbf{Input:} Point
+        \Statex \textbf{Output:} Node
+        \State {curr $\leftarrow$ root}
+        \While {!curr.isLeaf}
+        \State next $\leftarrow$ 0
+        \If {Point.x $\geq$ curr.center.x}
+        \State next $\leftarrow$ next + 4
+        \EndIf
+        \If {Point.y $\geq$ curr.center.y}
+        \State next $\leftarrow$ next + 2
+        \EndIf
+        \If {Point.z $\geq$ curr.center.z}
+        \State next $\leftarrow$ next + 1
+        \EndIf
+        \State curr $\leftarrow$ curr.children[next]
+        \EndWhile
+        \State \Return curr
+    \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+    \caption{Insert}\label{alg:octree insert}
+    \begin{algorithmic}[1]
+        \Statex \textbf{Input:} Point
+        \Statex \textbf{Output:} Boolean
+        \State {node $\leftarrow$ find(Point)}
+        \If {node.contains(Point)}
+        \State \Return False
+        \EndIf
+        \State {node.points.add(Point)}
+        \If {node.points.size $\geq$ limit}
+        \State node.subdivide
+        \EndIf
+        \State \Return True
+    \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+    \caption{Node Subdivision}\label{alg:octree subdivide}
+    \begin{algorithmic}[1]
+        \State isLeaf $\leftarrow$ False
+        \State newHalfSize $\leftarrow$ halfSize $\div$ 2
+        \For {i $\in$ \{0, 1\} }
+        \For {j $\in$ \{0, 1\} }
+        \For {k $\in$ \{0, 1\} }
+        \State X $\leftarrow$ center.x - newHalfSize + i $\times$ halfSize
+        \State Y $\leftarrow$ center.y - newHalfSize + j $\times$ halfSize
+        \State Z $\leftarrow$ center.z - newHalfSize + k $\times$ halfSize
+        \State children[i $\times$ 4 + j $\times$ 2 + k] $\leftarrow$ Node(\{X, Y, Z\}, newHalfSize)
+        \EndFor
+        \EndFor
+        \EndFor
+        \ForAll {Points \textbf{in} Node}
+        \State remove(Point)
+        \State next $\leftarrow$ 0
+        \If {Point.x $\geq$ center.x}
+        \State next $\leftarrow$ next + 4
+        \EndIf
+        \If {Point.y $\geq$ center.y}
+        \State next $\leftarrow$ next + 2
+        \EndIf
+        \If {Point.z $\geq$ center.z}
+        \State next $\leftarrow$ next + 1
+        \EndIf
+        \State children[next].points.add(Point)
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+    \caption{Resize}\label{alg:octree resize}
+    \begin{algorithmic}[1]
+        \Statex \textbf{Input:} Point
+        \While {Point is out of bounds}
+        \If {Point.x $<$ root.center.x}
+        \State direction.x $\leftarrow$ -1
+        \EndIf
+        \If {Point.y $<$ root.center.x}
+        \State direction.y $\leftarrow$ -1
+        \EndIf
+        \If {Point.z $<$ root.center.x}
+        \State direction.z $\leftarrow$ -1
+        \EndIf
+
+        \State newHalfSize $\leftarrow$ root.halfSize $\times$ 2;
+        \State newCenter.x $\leftarrow$ root.center.x + direction.x $\times$ root.halfsize
+        \State newCenter.y $\leftarrow$ root.center.y + direction.y $\times$ root.halfsize
+        \State newCenter.z $\leftarrow$ root.center.z + direction.z $\times$ root.halfsize
+        \State newRoot $\leftarrow$ Node(NULL, newCenter, newHalfSize)
+        \State newRoot.subdivide
+        \State rootCode $\leftarrow$ (direction.x + 1) $\times$ 2
+        \State rootCode $\leftarrow$ rootCode + (direction.y + 1)
+        \State rootCode $\leftarrow$ rootCode + (direction.z + 1) $\div$ 2
+        \State newRoot.children[rootCode] $\leftarrow$ root
+        \State root $\leftarrow$ newRoot
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+
+\end{document}

@@ -9,7 +9,7 @@ public class CoarseGrainOctree extends Octree {
     // Initialize octree
     CoarseGrainOctree(int vertexLimit) {
         this.vertexLimit = vertexLimit;
-        name = "Coarse-grain synchronized Octree";
+        name = "Coarse-Grain";
     }
 
     // Resize octree to fit new vertex

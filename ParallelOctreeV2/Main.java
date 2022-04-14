@@ -24,6 +24,10 @@ class Main {
         bwInsert = new BufferedWriter(new FileWriter("V2insertOutput.txt"));
         bwRemove = new BufferedWriter(new FileWriter("V2removeOutput.txt"));
         bwInsertRemove = new BufferedWriter(new FileWriter("V2insertRemoveOutput.txt"));
+
+        System.out.println("Type\t\tTest\t#Threads\t\tRuntime\n");
+        bwInsert.write("Type\tTest\t#Threads\tRuntime\n");
+        bwRemove.write("Type\tTest\t#Threads\tRuntime\n");
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-n":
@@ -173,13 +177,13 @@ class Main {
     static void printResults(BufferedWriter file, String testType, String name, int numThreads, int numVertices,
             double runtime, boolean verified)
             throws IOException {
-        String results = name + "\n" +
-                "\tTest: " + testType + "\n" +
-                "\tModel: " + model + "\n" +
-                "\t# Threads: " + numThreads + "\n" +
-                "\t# Vertices: " + numVertices + "\n" +
-                "\tVerified: " + verified + "\n" +
-                "\tRuntime: " + runtime + "s\n\n";
+        String results = name + "\t" +
+                            testType + "\t" +
+                            // model + "\n" +
+                            numThreads + "\t" +
+                            // numVertices + "\n" +
+                            // verified + "\n" +
+                            runtime + "\n";
         System.out.print(results);
         file.write(results);
     }

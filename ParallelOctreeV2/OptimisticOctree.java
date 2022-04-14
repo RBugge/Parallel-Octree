@@ -8,7 +8,7 @@ public class OptimisticOctree extends Octree {
     // Initialize octree
     OptimisticOctree(int vertexLimit, double halfSize) {
         this.vertexLimit = vertexLimit;
-        name = "Optimistic synchronized Octree";
+        name = "Optimistic";
 
         root = new Octant(null, new double[] { 0, 0, 0 }, halfSize);
     }

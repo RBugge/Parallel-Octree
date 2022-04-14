@@ -20,19 +20,21 @@ class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         bw = new BufferedWriter(new FileWriter("output.txt"));
-        for(int i = 0; i < args.length; i++) {
+        System.out.println("Type\t\t#Threads\t\tRuntime\n");
+        bw.write("Type\t#Threads\tRuntime\n");
+        for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-n":
-                    minThreads = Integer.parseInt(args[i+1]);
+                    minThreads = Integer.parseInt(args[i + 1]);
                     break;
                 case "-m":
-                    maxThreads = Integer.parseInt(args[i+1]);
+                    maxThreads = Integer.parseInt(args[i + 1]);
                     break;
                 case "-l":
-                    octantLimit = Integer.parseInt(args[i+1]);
+                    octantLimit = Integer.parseInt(args[i + 1]);
                     break;
                 case "-o":
-                    model = args[i+1];
+                    model = args[i + 1];
                     break;
 
                 default:
@@ -136,12 +138,12 @@ class Main {
 
     static void printResults(String name, int numThreads, int numVertices, double runtime, boolean verified)
             throws IOException {
-        String results = name + "\n" +
-                "\tModel: " + model + "\n" +
-                "\t# Threads: " + numThreads + "\n" +
-                "\t# Vertices: " + numVertices + "\n" +
-                "\tVerified: " + verified + "\n" +
-                "\tRuntime: " + runtime + "s\n\n";
+        String results = name + "\t" +
+                // model + "\t" +
+                numThreads + "\t" +
+                // numVertices + "\t" +
+                // verified + "\t" +
+                runtime + "\n";
         System.out.print(results);
         bw.write(results);
     }

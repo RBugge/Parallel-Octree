@@ -11,7 +11,7 @@ public class OptimisticOctree extends Octree {
     // Initialize octree
     OptimisticOctree(int vertexLimit) {
         this.vertexLimit = vertexLimit;
-        name = "Optimistic synchronized Octree";
+        name = "Optimistic";
     }
 
     // Resize octree to fit new vertex

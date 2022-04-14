@@ -1,14 +1,38 @@
 Type	#Threads	Runtime
-PointerBased	1	0.180266125
-Optimistic synchronized Octree	1	0.181231625
-Optimistic synchronized Octree	2	0.097611125
-Optimistic synchronized Octree	3	0.09590525
-Optimistic synchronized Octree	4	0.05207025
-Optimistic synchronized Octree	5	0.079361209
-Optimistic synchronized Octree	6	0.047969917
-Optimistic synchronized Octree	7	0.042293583
-Optimistic synchronized Octree	8	0.074746333
-Optimistic synchronized Octree	9	0.0364775
-Optimistic synchronized Octree	10	0.05777225
-Optimistic synchronized Octree	11	0.038096334
-Optimistic synchronized Octree	12	0.041527458
+PointerBased	1	0.180764125
+Coarse-Grain	1	0.1571545
+Fine-Grain	1	0.200208416
+Optimistic	1	0.246556167
+Coarse-Grain	2	0.209362459
+Fine-Grain	2	0.32033475
+Optimistic	2	0.085694375
+Coarse-Grain	3	0.209350709
+Fine-Grain	3	0.326350125
+Optimistic	3	0.06063175
+Coarse-Grain	4	0.223384125
+Fine-Grain	4	0.357456291
+Optimistic	4	0.050333083
+Coarse-Grain	5	0.222227458
+Fine-Grain	5	0.36372825
+Optimistic	5	0.046836375
+Coarse-Grain	6	0.296466375
+Fine-Grain	6	0.333707125
+Optimistic	6	0.044639084
+Coarse-Grain	7	0.285986625
+Fine-Grain	7	0.292734542
+Optimistic	7	0.040869833
+Coarse-Grain	8	0.260155375
+Fine-Grain	8	0.309635416
+Optimistic	8	0.035302708
+Coarse-Grain	9	0.287976292
+Fine-Grain	9	0.29076675
+Optimistic	9	0.034611208
+Coarse-Grain	10	0.27656125
+Fine-Grain	10	0.307962167
+Optimistic	10	0.035763084
+Coarse-Grain	11	0.265244583
+Fine-Grain	11	0.316204
+Optimistic	11	0.0344075
+Coarse-Grain	12	0.273828209
+Fine-Grain	12	0.31408025
+Optimistic	12	0.036691459

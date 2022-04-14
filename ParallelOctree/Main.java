@@ -75,15 +75,15 @@ class Main {
         // testPointerOctree(model, vertexData);
 
         for (int i = minThreads; i <= maxThreads; i++) {
-            CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit);
-            testOctree(cgOctree, i, vertexData);
+            // CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit);
+            // testOctree(cgOctree, i, vertexData);
 
-            // Working I think
-            FineGrainOctree fgOctree = new FineGrainOctree(octantLimit);
-            testOctree(fgOctree, i, vertexData);
+            // // Working I think
+            // FineGrainOctree fgOctree = new FineGrainOctree(octantLimit);
+            // testOctree(fgOctree, i, vertexData);
 
-            // OptimisticOctree oOctree = new OptimisticOctree(octantLimit);
-            // testOctree(oOctree, i, vertexData);
+            OptimisticOctree oOctree = new OptimisticOctree(octantLimit);
+            testOctree(oOctree, i, vertexData);
         }
 
         bw.close();

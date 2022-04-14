@@ -1,26 +1,14 @@
 Type	#Threads	Runtime
-PointerBased	1	0.2356759
-Coarse-Grain	1	0.2307172
-Fine-Grain	1	0.3029531
-Coarse-Grain	2	0.3283532
-Fine-Grain	2	0.2563829
-Coarse-Grain	3	0.3115405
-Fine-Grain	3	0.4712169
-Coarse-Grain	4	0.3639171
-Fine-Grain	4	0.3898679
-Coarse-Grain	5	0.3580288
-Fine-Grain	5	0.403428
-Coarse-Grain	6	0.3515016
-Fine-Grain	6	0.4668092
-Coarse-Grain	7	0.3873117
-Fine-Grain	7	0.4618657
-Coarse-Grain	8	0.4433364
-Fine-Grain	8	0.486456
-Coarse-Grain	9	0.4035317
-Fine-Grain	9	0.4763027
-Coarse-Grain	10	0.462494
-Fine-Grain	10	0.416906
-Coarse-Grain	11	0.4604816
-Fine-Grain	11	0.4296291
-Coarse-Grain	12	0.4293371
-Fine-Grain	12	0.4483791
+PointerBased	1	0.180266125
+Optimistic synchronized Octree	1	0.181231625
+Optimistic synchronized Octree	2	0.097611125
+Optimistic synchronized Octree	3	0.09590525
+Optimistic synchronized Octree	4	0.05207025
+Optimistic synchronized Octree	5	0.079361209
+Optimistic synchronized Octree	6	0.047969917
+Optimistic synchronized Octree	7	0.042293583
+Optimistic synchronized Octree	8	0.074746333
+Optimistic synchronized Octree	9	0.0364775
+Optimistic synchronized Octree	10	0.05777225
+Optimistic synchronized Octree	11	0.038096334
+Optimistic synchronized Octree	12	0.041527458

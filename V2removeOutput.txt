@@ -1,11 +1,14 @@
 Type	Test	#Threads	Runtime
-Pointer based Octree	Removal	1	0.5782324
-Coarse-Grain	Removal	6	1.2297408
-Fine-Grain	Removal	6	1.6920087
-Optimistic	Removal	6	0.6609538
-Coarse-Grain	Removal	7	1.1688434
-Fine-Grain	Removal	7	1.592458
-Optimistic	Removal	7	0.3474202
-Coarse-Grain	Removal	8	1.074396
-Fine-Grain	Removal	8	1.7242167
-Optimistic	Removal	8	0.3158717
+Pointer based Octree	Removal	1	0.010873333
+Optimistic	Removal	1	3.28E-4
+Optimistic	Removal	2	4.06584E-4
+Optimistic	Removal	3	4.06834E-4
+Optimistic	Removal	4	4.70667E-4
+Optimistic	Removal	5	4.8075E-4
+Optimistic	Removal	6	5.46667E-4
+Optimistic	Removal	7	6.38417E-4
+Optimistic	Removal	8	6.01042E-4
+Optimistic	Removal	9	6.92917E-4
+Optimistic	Removal	10	0.001691792
+Optimistic	Removal	11	6.98333E-4
+Optimistic	Removal	12	9.59333E-4

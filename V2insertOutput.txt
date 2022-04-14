@@ -1,11 +1,14 @@
 Type	Test	#Threads	Runtime
-Pointer based Octree	Insertion	1	0.2494325
-Coarse-Grain	Insertion	6	0.5265259
-Fine-Grain	Insertion	6	0.7512927
-Optimistic	Insertion	6	0.4521625
-Coarse-Grain	Insertion	7	0.4720656
-Fine-Grain	Insertion	7	0.5825749
-Optimistic	Insertion	7	0.1629336
-Coarse-Grain	Insertion	8	0.3595593
-Fine-Grain	Insertion	8	0.7015249
-Optimistic	Insertion	8	0.1375604
+Pointer based Octree	Insertion	1	0.001112083
+Optimistic	Insertion	1	1.855E-4
+Optimistic	Insertion	2	2.36875E-4
+Optimistic	Insertion	3	2.37875E-4
+Optimistic	Insertion	4	2.53875E-4
+Optimistic	Insertion	5	2.99875E-4
+Optimistic	Insertion	6	3.63084E-4
+Optimistic	Insertion	7	3.89E-4
+Optimistic	Insertion	8	4.20584E-4
+Optimistic	Insertion	9	4.96208E-4
+Optimistic	Insertion	10	0.001435042
+Optimistic	Insertion	11	4.91041E-4
+Optimistic	Insertion	12	7.30583E-4

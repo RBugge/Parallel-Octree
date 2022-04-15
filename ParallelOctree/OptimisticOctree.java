@@ -128,7 +128,18 @@ public class OptimisticOctree extends Octree {
     @Override
     public boolean remove(Vertex v) {
 
-        return find(v).remove(v);
+        while (true) {
+            Octant o = find(v);
+            o.lock.lock();
+            try {
+                // Validate
+                if (o.isLeaf) {
+                    return o.remove(v);
+                }
+            } finally {
+                o.lock.unlock();
+            }
+        }
 
     }
 
@@ -198,7 +209,12 @@ public class OptimisticOctree extends Octree {
 
         @Override
         public boolean remove(Vertex v) {
-            return vertices.remove(v);
+            lock.lock();
+            try {
+                return vertices.remove(v);
+            } finally {
+                lock.unlock();
+            }
         }
 
         // Check if vertex is a duplicate in the octant's vertices

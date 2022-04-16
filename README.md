@@ -40,8 +40,8 @@ V2: `javac -d build ./ParallelOctreeV2/*.java && java -cp ./build ParallelOctree
 Output is generated for each version of the octree and at each number of threads in the range provided.
 
 Terminal and Files:\
-V1: `output.txt`\
-V2: `V2insertOutput.txt` and `V2removeOutput.txt`
+V1: `V1insertOutput.txt` and `V1removeOutput.txt` and `V1insertRemoveOutput.txt`\
+V2: `V2insertOutput.txt` and `V2removeOutput.txt` and `V2insertRemoveOutput.txt`
 
 Results:
 

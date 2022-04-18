@@ -90,14 +90,17 @@ class Main {
         // testPointerOctree(model, vertexData);
 
         for (int i = minThreads; i <= maxThreads; i++) {
-            CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit, halfSize);
-            testOctree(cgOctree, i, vertexData);
+            // CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit, halfSize);
+            // testOctree(cgOctree, i, vertexData);
 
-            FineGrainOctree fgOctree = new FineGrainOctree(octantLimit, halfSize);
-            testOctree(fgOctree, i, vertexData);
+            // FineGrainOctree fgOctree = new FineGrainOctree(octantLimit, halfSize);
+            // testOctree(fgOctree, i, vertexData);
 
-            OptimisticOctree oOctree = new OptimisticOctree(octantLimit, halfSize);
-            testOctree(oOctree, i, vertexData);
+            // OptimisticOctree oOctree = new OptimisticOctree(octantLimit, halfSize);
+            // testOctree(oOctree, i, vertexData);
+
+            LockFreeOctree lfOctree = new LockFreeOctree(octantLimit, halfSize);
+            testOctree(lfOctree, i, vertexData);
         }
 
         bwInsert.close();

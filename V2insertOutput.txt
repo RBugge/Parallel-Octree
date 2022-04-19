@@ -1,10 +1,10 @@
 Type	Test	#Threads	Runtime
-Pointer based Octree	Insertion	1	0.2183686
-LockFree	Insertion	1	0.4066205
-LockFree	Insertion	2	0.391598401
-LockFree	Insertion	3	0.1945143
-LockFree	Insertion	4	0.2339402
-LockFree	Insertion	5	0.2440528
-LockFree	Insertion	6	0.156692
-LockFree	Insertion	7	0.1685799
-LockFree	Insertion	8	0.177915899
+Pointer based Octree	Insertion	1	0.219092801
+LockFree	Insertion	1	0.402752
+LockFree	Insertion	2	0.3132276
+LockFree	Insertion	3	0.3671762
+LockFree	Insertion	4	0.1371021
+LockFree	Insertion	5	0.1453795
+LockFree	Insertion	6	0.106405701
+LockFree	Insertion	7	0.1454271
+LockFree	Insertion	8	0.156803301

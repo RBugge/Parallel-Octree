@@ -75,6 +75,26 @@ public class LockFreeOctree extends Octree {
         }
     }
 
+    public boolean insert(Vertex v, Octant o) {
+        while (true) {
+            o = find(v, o);
+
+            if (!o.isLeaf) {
+                continue;
+            }
+
+            if (o.contains(v)) {
+                return false;
+            }
+
+            if (o.insert(v)) {
+                return true;
+            } else {
+                continue;
+            }
+        }
+    }
+
     // Find and remove
     @Override
     public boolean remove(Vertex v) {
@@ -155,7 +175,7 @@ public class LockFreeOctree extends Octree {
                     nextOctant += 1;
 
                 if (!children[nextOctant].insert(v)) {
-                    LockFreeOctree.this.insert(v);
+                    LockFreeOctree.this.insert(v, this);
                 }
                 // LockFreeOctree.this.insert(v);
             }

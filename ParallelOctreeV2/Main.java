@@ -10,6 +10,7 @@ import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.Random;
 
 class Main {
     static BufferedWriter bwInsert;
@@ -28,6 +29,7 @@ class Main {
         System.out.println("Type\t\tTest\t#Threads\t\tRuntime\n");
         bwInsert.write("Type\tTest\t#Threads\tRuntime\n");
         bwRemove.write("Type\tTest\t#Threads\tRuntime\n");
+        bwInsertRemove.write("Type\tTest\t#Threads\tRuntime\n");
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-n":
@@ -141,28 +143,71 @@ class Main {
         printResults(bwInsert, "Insertion", octree.name, numThreads, vertexData.length, execTime, verified);
 
         // Test Removal
-        for (int i = 0; i < numThreads; i++) {
-            final int id = i;
-            completionService.submit(new Callable<Void>() {
-                private final int ID = id;
+        // for (int i = 0; i < numThreads; i++) {
+        //     final int id = i;
+        //     completionService.submit(new Callable<Void>() {
+        //         private final int ID = id;
 
-                public Void call() {
-                    for (int i = ID; i < numVertices; i += numThreads) {
-                        octree.remove(vertexData[i]);
-                    }
-                    return null;
-                }
-            });
-        }
+        //         public Void call() {
+        //             for (int i = ID; i < numVertices; i += numThreads) {
+        //                 octree.remove(vertexData[i]);
+        //             }
+        //             return null;
+        //         }
+        //     });
+        // }
 
-        for (int i = 0; i < numThreads; i++) {
-            completionService.take();
-        }
+        // for (int i = 0; i < numThreads; i++) {
+        //     completionService.take();
+        // }
+
+        // execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        // verified = verify(octree, vertexData) == numVertices;
+        // printResults(bwRemove, "Removal", octree.name, numThreads, vertexData.length, execTime, verified);
+
+        // Test Insertion/Removal
+        // Random rand = new Random();
+        // for (int i = 0; i < numThreads; i++) {
+        //     final int id = i;
+        //     completionService.submit(new Callable<Void>() {
+        //         private final int ID = id;
+        //         int numVerticesInsert = ID;
+        //         int numVerticesRemove = ID;
+        //         int action;
+        //         int[] done = new int[numVertices];
+        //         public Void call() {
+        //             while (numVerticesInsert < numVertices || numVerticesRemove < numVertices)
+        //             {
+        //                 // Randomly get action.
+        //                 action = rand.nextInt(2);
+        //                 // If action is set to 0, add the next vertex if it's less than total vertices.
+        //                 if (action == 0 && numVerticesInsert < numVertices)
+        //                 {
+        //                     done[numVerticesInsert] = 1;
+        //                     octree.insert(vertexData[numVerticesInsert]);
+        //                     numVerticesInsert += numThreads;
+        //                 }
+        //                 // If action is set to 1, remove the vertex from octree if it's already been added in.
+        //                 else if (action == 1 && done[numVerticesRemove] == 1)
+        //                 {
+        //                     octree.remove(vertexData[numVerticesRemove]);
+        //                     numVerticesRemove += numThreads;
+        //                 }
+        //             }
+        //             return null;
+        //         }
+        //     });
+        // }
+
         executor.shutdown();
 
-        execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
-        verified = verify(octree, vertexData) == numVertices;
-        printResults(bwRemove, "Removal", octree.name, numThreads, vertexData.length, execTime, verified);
+        // for (int i = 0; i < numThreads; i++) {
+        //     completionService.take();
+        // }
+
+        // execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        // verified = verify(octree, vertexData) == numVertices;
+        // printResults(bwInsertRemove, "Insertion/Removal", octree.name, numThreads, vertexData.length, execTime, verified);
     }
 
     // TODO: Other error checking

@@ -40,10 +40,16 @@ public class LockFreeOctree extends Octree {
 
         while (true) {
             Octant o = find(v);
-            if (contains(v))
-                return false;
 
-            if (o.insert(v)) {
+            if (!o.isLeaf || o.subdividing.get()) {
+                continue;
+            }
+
+            if (o.contains(v)) {
+                return false;
+            }
+
+            if (o.insert(v) && contains(v)) {
                 return true;
             } else {
                 continue;
@@ -81,14 +87,20 @@ public class LockFreeOctree extends Octree {
 
         @Override
         public boolean insert(Vertex v) {
-            if (!isLeaf || subdividing.get()) {
-                return false;
+            boolean flag = false;
+            if (vertices.size() >= vertexLimit) {
+                if (subdividing.compareAndSet(false, true)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
             }
 
             vertices.add(v);
-            // If limit was reached and new vertex is not a duplicate
-            if (vertices.size() > vertexLimit) {
+            if (flag) {
                 subdivide();
+            } else if (subdividing.get()) {
+                return false;
             }
             return true;
         }
@@ -96,8 +108,6 @@ public class LockFreeOctree extends Octree {
         // Complete subdivision of octant into eight new octants
         @Override
         protected void subdivide() {
-            subdividing.set(true);
-
             double childHalfSize = halfSize / 2;
 
             Octant tempChildren[] = new Octant[8];
@@ -133,7 +143,6 @@ public class LockFreeOctree extends Octree {
             vertices.clear();
 
             // linearization point?
-            subdividing.set(false);
             isLeaf = false;
         }
 

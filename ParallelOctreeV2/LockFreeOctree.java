@@ -34,14 +34,32 @@ public class LockFreeOctree extends Octree {
         return curr;
     }
 
+    // Find octant which contains vertex v
+    // @Override
+    protected Octant find(Vertex v, Octant curr) {
+        while (!curr.isLeaf) {
+            // Based on morton code, calculates correct octant based on position from center
+            int nextOctant = 0;
+            if (v.x >= curr.center[0])
+                nextOctant += 4;
+            if (v.y >= curr.center[1])
+                nextOctant += 2;
+            if (v.z >= curr.center[2])
+                nextOctant += 1;
+
+            curr = (Octant) curr.children[nextOctant];
+        }
+        return curr;
+    }
+
     // Find and insert
     @Override
     public boolean insert(Vertex v) {
-
+        Octant o = root;
         while (true) {
-            Octant o = find(v);
+            o = find(v, o);
 
-            if (!o.isLeaf || o.subdividing.get()) {
+            if (!o.isLeaf) {
                 continue;
             }
 
@@ -49,7 +67,7 @@ public class LockFreeOctree extends Octree {
                 return false;
             }
 
-            if (o.insert(v) && contains(v)) {
+            if (o.insert(v)) {
                 return true;
             } else {
                 continue;
@@ -87,22 +105,23 @@ public class LockFreeOctree extends Octree {
 
         @Override
         public boolean insert(Vertex v) {
-            boolean flag = false;
+
             if (vertices.size() >= vertexLimit) {
                 if (subdividing.compareAndSet(false, true)) {
-                    flag = true;
+                    vertices.add(v);
+                    subdivide();
+                    return true;
                 } else {
                     return false;
                 }
             }
-
             vertices.add(v);
-            if (flag) {
-                subdivide();
-            } else if (subdividing.get()) {
+
+            if (subdividing.get()) {
                 return false;
+            } else {
+                return true;
             }
-            return true;
         }
 
         // Complete subdivision of octant into eight new octants
@@ -110,12 +129,12 @@ public class LockFreeOctree extends Octree {
         protected void subdivide() {
             double childHalfSize = halfSize / 2;
 
-            Octant tempChildren[] = new Octant[8];
+            // Octant tempChildren[] = new Octant[8];
 
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 2; j++) {
                     for (int k = 0; k < 2; k++) {
-                        tempChildren[i * 4 + j * 2 + k] = new Octant(this, new double[] {
+                        children[i * 4 + j * 2 + k] = new Octant(this, new double[] {
                                 center[0] - childHalfSize + i * halfSize,
                                 center[1] - childHalfSize + j * halfSize,
                                 center[2] - childHalfSize + k * halfSize,
@@ -123,6 +142,7 @@ public class LockFreeOctree extends Octree {
                     }
                 }
             }
+            isLeaf = false;
 
             // Reinsert vertices to children
             for (var v : vertices) {
@@ -134,16 +154,17 @@ public class LockFreeOctree extends Octree {
                 if (v.z >= center[2])
                     nextOctant += 1;
 
-                tempChildren[nextOctant].insert(v);
+                if (!children[nextOctant].insert(v)) {
+                    LockFreeOctree.this.insert(v);
+                }
+                // LockFreeOctree.this.insert(v);
             }
 
-            children = tempChildren;
+            // children = tempChildren;
 
             // Clear children
             vertices.clear();
 
-            // linearization point?
-            isLeaf = false;
         }
 
         @Override

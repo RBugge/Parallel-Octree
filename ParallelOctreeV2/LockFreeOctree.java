@@ -98,19 +98,45 @@ public class LockFreeOctree extends Octree {
     // Find and remove
     @Override
     public boolean remove(Vertex v) {
+        if(!contains(v)) {
+            return false;
+        }
+
+        Octant o = root;
         while (true) {
-            Octant o = find(v);
-            // Validate
-            if (o.isLeaf) {
-                return o.remove(v);
+            o = find(v, o);
+
+            if (!o.isLeaf) {
+                continue;
             }
 
+            if (o.remove(v)) {
+                return true;
+            }
         }
     }
 
     @Override
     public boolean contains(Vertex v) {
-        return find(v).contains(v);
+        Octant o = root;
+        while (true) {
+            o = find(v, o);
+
+            if (!o.isLeaf) {
+                continue;
+            }
+
+            if (o.contains(v)) {
+                return true;
+            }
+
+            // Check if octant started subdivision, loop again as points in octant could
+            // have been modified during subdivision before being read by contains
+            // Otherwise return false
+            if (!o.subdividing.get()) {
+                return false;
+            }
+        }
     }
 
     class Octant extends Octree.Octant {

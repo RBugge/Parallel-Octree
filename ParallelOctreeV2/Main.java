@@ -89,17 +89,16 @@ class Main {
 
         PointerOctree octree = new PointerOctree(octantLimit, halfSize);
         testOctree(octree, 1, vertexData);
-        // testPointerOctree(model, vertexData);
 
         for (int i = minThreads; i <= maxThreads; i++) {
-            // CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit, halfSize);
-            // testOctree(cgOctree, i, vertexData);
+            CoarseGrainOctree cgOctree = new CoarseGrainOctree(octantLimit, halfSize);
+            testOctree(cgOctree, i, vertexData);
 
-            // FineGrainOctree fgOctree = new FineGrainOctree(octantLimit, halfSize);
-            // testOctree(fgOctree, i, vertexData);
+            FineGrainOctree fgOctree = new FineGrainOctree(octantLimit, halfSize);
+            testOctree(fgOctree, i, vertexData);
 
-            // OptimisticOctree oOctree = new OptimisticOctree(octantLimit, halfSize);
-            // testOctree(oOctree, i, vertexData);
+            OptimisticOctree oOctree = new OptimisticOctree(octantLimit, halfSize);
+            testOctree(oOctree, i, vertexData);
 
             LockFreeOctree lfOctree = new LockFreeOctree(octantLimit, halfSize);
             testOctree(lfOctree, i, vertexData);
@@ -143,61 +142,61 @@ class Main {
         printResults(bwInsert, "Insertion", octree.name, numThreads, vertexData.length, execTime, verified);
 
         // Test Removal
-        // for (int i = 0; i < numThreads; i++) {
-        //     final int id = i;
-        //     completionService.submit(new Callable<Void>() {
-        //         private final int ID = id;
+        for (int i = 0; i < numThreads; i++) {
+            final int id = i;
+            completionService.submit(new Callable<Void>() {
+                private final int ID = id;
 
-        //         public Void call() {
-        //             for (int i = ID; i < numVertices; i += numThreads) {
-        //                 octree.remove(vertexData[i]);
-        //             }
-        //             return null;
-        //         }
-        //     });
-        // }
+                public Void call() {
+                    for (int i = ID; i < numVertices; i += numThreads) {
+                        octree.remove(vertexData[i]);
+                    }
+                    return null;
+                }
+            });
+        }
 
-        // for (int i = 0; i < numThreads; i++) {
-        //     completionService.take();
-        // }
+        for (int i = 0; i < numThreads; i++) {
+            completionService.take();
+        }
 
-        // execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
-        // verified = verify(octree, vertexData) == numVertices;
-        // printResults(bwRemove, "Removal", octree.name, numThreads, vertexData.length, execTime, verified);
+        execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        verified = verify(octree, vertexData) == numVertices;
+        printResults(bwRemove, "Removal\t", octree.name, numThreads, vertexData.length, execTime, verified);
 
         // Test Insertion/Removal
-        // Random rand = new Random();
-        // for (int i = 0; i < numThreads; i++) {
-        //     final int id = i;
-        //     completionService.submit(new Callable<Void>() {
-        //         private final int ID = id;
-        //         int numVerticesInsert = ID;
-        //         int numVerticesRemove = ID;
-        //         int action;
-        //         int[] done = new int[numVertices];
-        //         public Void call() {
-        //             while (numVerticesInsert < numVertices || numVerticesRemove < numVertices)
-        //             {
-        //                 // Randomly get action.
-        //                 action = rand.nextInt(2);
-        //                 // If action is set to 0, add the next vertex if it's less than total vertices.
-        //                 if (action == 0 && numVerticesInsert < numVertices)
-        //                 {
-        //                     done[numVerticesInsert] = 1;
-        //                     octree.insert(vertexData[numVerticesInsert]);
-        //                     numVerticesInsert += numThreads;
-        //                 }
-        //                 // If action is set to 1, remove the vertex from octree if it's already been added in.
-        //                 else if (action == 1 && done[numVerticesRemove] == 1)
-        //                 {
-        //                     octree.remove(vertexData[numVerticesRemove]);
-        //                     numVerticesRemove += numThreads;
-        //                 }
-        //             }
-        //             return null;
-        //         }
-        //     });
-        // }
+        Random rand = new Random();
+        for (int i = 0; i < numThreads; i++) {
+            final int id = i;
+            completionService.submit(new Callable<Void>() {
+                private final int ID = id;
+                int numVerticesInsert = ID;
+                int numVerticesRemove = ID;
+                int action;
+                int[] done = new int[numVertices];
+                public Void call() {
+                    while (numVerticesInsert < numVertices || numVerticesRemove < numVertices)
+                    {
+                        // Randomly get action.
+                        action = rand.nextInt(2);
+                        // If action is set to 0, add the next vertex if it's less than total vertices.
+                        if (action == 0 && numVerticesInsert < numVertices)
+                        {
+                            done[numVerticesInsert] = 1;
+                            octree.insert(vertexData[numVerticesInsert]);
+                            numVerticesInsert += numThreads;
+                        }
+                        // If action is set to 1, remove the vertex from octree if it's already been added in.
+                        else if (action == 1 && done[numVerticesRemove] == 1)
+                        {
+                            octree.remove(vertexData[numVerticesRemove]);
+                            numVerticesRemove += numThreads;
+                        }
+                    }
+                    return null;
+                }
+            });
+        }
 
         executor.shutdown();
 

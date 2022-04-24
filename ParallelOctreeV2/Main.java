@@ -200,13 +200,13 @@ class Main {
 
         executor.shutdown();
 
-        // for (int i = 0; i < numThreads; i++) {
-        //     completionService.take();
-        // }
+        for (int i = 0; i < numThreads; i++) {
+            completionService.take();
+        }
 
-        // execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
-        // verified = verify(octree, vertexData) == numVertices;
-        // printResults(bwInsertRemove, "Insertion/Removal", octree.name, numThreads, vertexData.length, execTime, verified);
+        execTime = (double) (System.nanoTime() - start) / Math.pow(10, 9);
+        verified = verify(octree, vertexData) == numVertices;
+        printResults(bwInsertRemove, "Ins/Rem\t", octree.name, numThreads, vertexData.length, execTime, verified);
     }
 
     // TODO: Other error checking

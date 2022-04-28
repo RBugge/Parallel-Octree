@@ -46,16 +46,15 @@ V2: `V2insertOutput.txt` and `V2removeOutput.txt` and `V2insertRemoveOutput.txt`
 Results:
 
 ```Text
-<Octree Version>
-        Model: <model name>
-        # Threads: <number of threads used>
-        # Vertices: <number of vertices in model>
-        Runtime: <time to run test in seconds>
+Missing: <# Missing Vertices>
+<Octree Version> <Test Type> <# Threads> <Runtime (s)>
 ...
 ...
 ...
 ```
 
 ## Notes
+
+The number of missing vertices corresponds to the model used and the test being performed. Insertion should have `0` missing vertices, while the other two tests should be missing all vertices that are in the model.
 
 Models are currently loaded in from `.gum` files. A tool is provided to convert `.obj` to `.gum` to use models not included with the project. It is planned to load `.obj` files directly in the final version, however, it is not a top priority.

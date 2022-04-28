@@ -1,0 +1,9 @@
+Algorithms
+——————————
+Coarse-Grained- The coarse-grained octree has one lock to mediate all its method calls. This works best when levels of concurrency are low, but if too many threads try to access the object at the same time, then the object becomes a sequential bottleneck, forcing threads to wait in line for access.
+
+Fine-Grained- Instead of using a single lock to synchronize every access to an object, the fine-grained octree splits the object into independently synchronized components, ensuring that method calls interfere only when trying to access the same component at the same time.
+
+Optimistic- The optimistic octree searchs for the object without acquiring any locks at all. If the method finds the sought-after component, it locks that component, and then checks that the component has not changed in the interval between when it was inspected and when it was locked.
+
+Lock-Free- This technique allow multiple threads to work together in a non-blocking way. The failure of any thread cannot cause the failure of another. This algorithm is also wait-free.
